@@ -18,12 +18,13 @@ class LoginForm(AuthenticationForm):
         return super().clean()
 
 
-admin.site.login_form = LoginForm
-admin.site.login_template = "login.html"
+# admin.site.login_form = LoginForm
+# admin.site.login_template = "login.html"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/common/", include("apps.common.urls", namespace="common")),
+    path("api/v1/users/", include("apps.users.urls")),
 ]
 
 urlpatterns += swagger_urlpatterns

@@ -13,3 +13,7 @@ nplusone==1.0.0
 celery==5.3.6
 redis==5.0.1
 flower==2.0.1
+django-phonenumber-field==6.3.0
+phonenumbers==9.15.0
+pillow==11.1.0
+djangorestframework-simplejwt==5.5.1
