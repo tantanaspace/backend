@@ -1,3 +1,4 @@
+<<<<<<< README.md
 # Tantana Backend
 
 A Django-based backend application with user authentication and management.
@@ -18,3 +19,4 @@ Create a `.env` file with the following variables:
 - `AES_KEY` - AES encryption key
 - `RECAPTCHA_PUBLIC_KEY` - Google reCAPTCHA public key
 - `RECAPTCHA_PRIVATE_KEY` - Google reCAPTCHA private key
+
