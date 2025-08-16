@@ -1,4 +1,3 @@
-<<<<<<< README.md
 # Tantana Backend
 
 A Django-based backend application with user authentication and management.
