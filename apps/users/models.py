@@ -1,95 +1,59 @@
+from tkinter import N
+from turtle import mode
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from phonenumber_field.modelfields import PhoneNumberField
-from apps.common.models import BaseModel
-from .choices import LANGUAGE_CHOICES, GENDER_CHOICES, DEFAULT_LANGUAGE
+
 from rest_framework_simplejwt.tokens import RefreshToken
+from phonenumber_field.modelfields import PhoneNumberField
+
+from apps.users.managers import UserManager
 
 
-class UserManager(BaseUserManager):
-    """
-    Custom user manager for User model that uses phone_number instead of username
-    """
+class User(AbstractUser):
+    class Language(models.TextChoices):
+        ENGLISH = "en", _("English")
+        RUSSIAN = "ru", _("Russian")
+        UZBEK = "uz", _("Uzbek")
 
-    def create_user(self, phone_number, full_name, password=None, **extra_fields):
-        if not phone_number:
-            raise ValueError('The Phone Number field must be set')
-        if not full_name:
-            raise ValueError('The Full Name field must be set')
+    class Role(models.TextChoices):
+        USER = "user", _("User")
+        HOST = "host", _("Host")
+    
+    class Gender(models.TextChoices):
+        MALE = 'male', _('Male')
+        FEMALE = 'female', _('Female')
 
-        user = self.model(
-            phone_number=phone_number,
-            full_name=full_name,
-            **extra_fields
-        )
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+    username = None
+    email = None
+    first_name = None
+    last_name = None
 
-    def create_superuser(self, phone_number, full_name, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+    EMAIL_FIELD = None
+    USERNAME_FIELD = "phone_number"
+    REQUIRED_FIELDS = ["full_name"]
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
-        return self.create_user(phone_number, full_name, password, **extra_fields)
-
-
-class User(AbstractUser, BaseModel):
-    username = models.CharField(max_length=255, verbose_name=_("Username"), unique=True, null=True)
-    phone_number = PhoneNumberField(unique=True, verbose_name=_("Phone Number"))
-    full_name = models.CharField(max_length=255, verbose_name=_("Full Name"))
-    date_of_birth = models.DateField(null=True, blank=True, verbose_name=_("Date of Birth"))
-    language = models.CharField(
-        max_length=2,
-        choices=LANGUAGE_CHOICES,
-        default=DEFAULT_LANGUAGE,
-        verbose_name=_("Language")
-    )
-    gender = models.CharField(
-        max_length=20,
-        choices=GENDER_CHOICES,
-        null=True,
-        blank=True,
-        verbose_name=_("Gender")
-    )
-    photo = models.ImageField(
-        upload_to='user_photos/',
-        null=True,
-        blank=True,
-        verbose_name=_("Profile Photo")
-    )
+    phone_number = PhoneNumberField(_("Phone number"), max_length=15, unique=True)
+    full_name = models.CharField(_("Full Name"), max_length=255)
+    date_of_birth = models.DateField(_("Date of Birth"), null=True, blank=True)
+    role = models.CharField(_("Role"), max_length=20, choices=Role.choices)
+    gender = models.CharField(_("Gender"), max_length=20, choices=Gender.choices, null=True, blank=True)
+    language = models.CharField(_("Language"), max_length=3, choices=Language.choices, default=Language.UZBEK)
+    avatar = models.ImageField(_('Avatar'), upload_to='users/avatar', null=True, blank=True)
     is_notification_enabled = models.BooleanField(default=True, verbose_name=_("Notification Enabled"))
+    telegram_id = models.CharField(_('Telegram ID'), max_length=255, unique=True)
 
-    # Use phone_number as the username field
-    USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['full_name']
-
-    # Use custom user manager
     objects = UserManager()
 
     class Meta:
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
-        db_table = 'users'
-        ordering = ['-created_at']
-
-    @property
-    def tokens(self):
-        token = RefreshToken.for_user(self)
-        return {"access": str(token.access_token), "refresh": str(token)}
-
-    def has_usable_password(self):
-        """Check if user has a usable password"""
-        return bool(self.password and self.password.strip())
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
 
     def __str__(self):
-        return self.full_name or str(self.phone_number)
+        return f"{self.full_name} - {self.phone_number}"
 
-    def get_full_name(self):
-        return self.full_name
+    @property
+    def tokens(self) -> dict:
+        token = RefreshToken.for_user(self)
+        token['role'] = self.role
+        return {"access_token": str(token.access_token), "refresh_token": str(token)}
