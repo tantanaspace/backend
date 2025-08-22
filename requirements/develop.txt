@@ -7,3 +7,5 @@ pyupgrade==3.10.1
 reorder-python-imports==3.10.0
 isort==5.12.0
 yesqa==1.5.0
+django-debug-toolbar==5.2.0
+django-querycount==0.8.3

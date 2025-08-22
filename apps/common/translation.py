@@ -1,10 +1,13 @@
-# translation.py
-# from modeltranslation.translator import TranslationOptions, register
+from modeltranslation.translator import register, TranslationOptions
 
-# from . import models
+from apps.common.models import CompanyProfile
 
 
-# @register(models.FrontendTranslation)
-# class FrontTranslationOptions(TranslationOptions):
-#     fields = ("text",)
-# Loyiha qanday tillarda bo'lishiga qarab settings dan tillar qoshilgandan keyin migratsiya qilinsin
+@register(CompanyProfile)
+class CompanyProfileTranslationOptions(TranslationOptions):
+    fields = ('about',)
+    
+
+__all__ = [
+    'CompanyProfileTranslationOptions'
+]

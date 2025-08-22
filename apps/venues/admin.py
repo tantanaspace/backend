@@ -1,0 +1,176 @@
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
+from apps.venues.models import (
+    Company, VenueCategory, Venue, VenueZone, VenueWorkingHour,
+    VenueImage, VenueSocialMedia, VenueReview
+)
+
+
+@admin.register(Company)
+class CompanyAdmin(admin.ModelAdmin):
+    list_display = ('name', 'external_id', 'created_at')
+    search_fields = ('name', 'external_id')
+    list_filter = ('created_at', 'updated_at')
+    ordering = ('name',)
+    readonly_fields = ('created_at', 'updated_at')
+    
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'logo', 'external_id')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueCategory)
+class VenueCategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'is_active', 'created_at')
+    list_editable = ('order', 'is_active')
+    search_fields = ('title',)
+    list_filter = ('is_active', 'created_at')
+    ordering = ('order', 'title')
+    readonly_fields = ('created_at', 'updated_at')
+    
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'icon', 'order', 'is_active')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(Venue)
+class VenueAdmin(admin.ModelAdmin):
+    list_display = ('name', 'company', 'location', 'rating', 'created_at')
+    list_filter = ('company', 'category', 'created_at', 'updated_at')
+    search_fields = ('name', 'description', 'location', 'external_id')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at')
+    filter_horizontal = ('category', 'facilities', 'tags')
+    autocomplete_fields = ('company', 'background_image')
+    
+    fieldsets = (
+        (_('Basic Information'), {
+            'fields': ('name', 'company', 'description', 'external_id')
+        }),
+        (_('Location'), {
+            'fields': ('location', 'longitude', 'latitude')
+        }),
+        (_('Media & Categories'), {
+            'fields': ('background_image', 'category', 'facilities', 'tags')
+        }),
+        (_('Rating'), {
+            'fields': ('rating',)
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueZone)
+class VenueZoneAdmin(admin.ModelAdmin):
+    list_display = ('name', 'external_id', 'created_at')
+    search_fields = ('name', 'external_id')
+    list_filter = ('created_at', 'updated_at')
+    ordering = ('name',)
+    readonly_fields = ('created_at', 'updated_at')
+    
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'photo_view', 'external_id')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueWorkingHour)
+class VenueWorkingHourAdmin(admin.ModelAdmin):
+    list_display = ('venue', 'weekday', 'opening_time', 'closing_time')
+    list_filter = ('weekday', 'venue', 'created_at')
+    search_fields = ('venue__name',)
+    ordering = ('venue__name', 'weekday', 'opening_time')
+    readonly_fields = ('created_at', 'updated_at')
+    autocomplete_fields = ('venue',)
+    
+    fieldsets = (
+        (None, {
+            'fields': ('venue', 'weekday', 'opening_time', 'closing_time')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueImage)
+class VenueImageAdmin(admin.ModelAdmin):
+    list_display = ('venue', 'order', 'is_main', 'created_at')
+    list_editable = ('order', 'is_main')
+    list_filter = ('is_main', 'venue', 'created_at')
+    search_fields = ('venue__name',)
+    ordering = ('venue__name', 'order')
+    readonly_fields = ('created_at', 'updated_at')
+    autocomplete_fields = ('venue',)
+    
+    fieldsets = (
+        (None, {
+            'fields': ('venue', 'image', 'order', 'is_main')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueSocialMedia)
+class VenueSocialMediaAdmin(admin.ModelAdmin):
+    list_display = ('venue', 'social_type', 'link', 'is_active', 'created_at')
+    list_filter = ('social_type', 'is_active', 'venue', 'created_at')
+    search_fields = ('venue__name', 'link')
+    ordering = ('venue__name', 'social_type')
+    readonly_fields = ('created_at', 'updated_at')
+    autocomplete_fields = ('venue',)
+    
+    fieldsets = (
+        (None, {
+            'fields': ('venue', 'social_type', 'link', 'is_active')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(VenueReview)
+class VenueReviewAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'rating', 'is_approved', 'user', 'created_at')
+    list_filter = ('rating', 'is_approved', 'created_at')
+    search_fields = ('full_name', 'description', 'user__full_name')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at')
+    autocomplete_fields = ('user',)
+    
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'full_name', 'description', 'rating', 'is_approved')
+        }),
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
