@@ -1,0 +1,55 @@
+variables:
+  RSYNC_EXCLUDES: "--exclude=.git/ --exclude=.gitlab-ci.yml --exclude=media/ --exclude=staticfiles/ --exclude=static/ --exclude=locale/ --exclude=.env --exclude=venv/ --exclude=local_settings.py --exclude=dev.py --exclude=prod.py --exclude=__pycache__/ --exclude=app-mobile-deeplink/"
+  WORK_DIR: /var/devops/tantana-backend
+  VENV_PATH: /var/devops/tantana-backend/venv
+
+  SERVICES: "gunicorn-tantana.service celeryworker-tantana.service celeryflower-tantana.service celerybeat-tantana.service"
+  TAG: tantana
+
+stages:
+  - build
+  - restart
+
+build:
+  stage: build
+  script:
+    - echo "==> Настройка прав на рабочую директорию"
+    - sudo chown -R gitlab-runner:gitlab-runner $WORK_DIR
+
+    - echo "==> Синхронизация файлов"
+    - sudo rsync -rult --delete-after $RSYNC_EXCLUDES $CI_PROJECT_DIR/ $WORK_DIR/
+
+    - echo "==> Проверка наличия venv"
+    - if [ ! -d "$VENV_PATH" ]; then python3.10 -m venv $VENV_PATH; fi
+
+    - echo "==> Активация виртуального окружения"
+    - source $VENV_PATH/bin/activate
+
+    - pip install -r requirements/production.txt
+  tags:
+    - $TAG
+  timeout: 1 hour
+  only:
+    - main
+
+restart:
+  stage: restart
+  script:
+    - echo "==> Запуск миграций"
+    - cd $WORK_DIR && source $VENV_PATH/bin/activate
+    - python manage.py migrate
+
+    - echo "==> Сборка статических файлов"
+    - python manage.py collectstatic --no-input
+
+    - echo "==> Перезапуск сервисов"
+    - for service in $SERVICES; do sudo systemctl restart $service; done
+
+    - echo "==> Проверка статуса сервисов"
+    - for service in $SERVICES; do sudo systemctl status $service; done
+  tags:
+    - $TAG
+  timeout: 2 hours
+  only:
+    - main
+
