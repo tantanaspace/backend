@@ -9,15 +9,15 @@ from apps.venues.models import (
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'external_id', 'created_at')
-    search_fields = ('name', 'external_id')
+    list_display = ('name', 'external_id', 'parsing_id', 'created_at')
+    search_fields = ('name', 'external_id', 'parsing_id')
     list_filter = ('created_at', 'updated_at')
     ordering = ('name',)
     readonly_fields = ('created_at', 'updated_at')
     
     fieldsets = (
         (None, {
-            'fields': ('name', 'logo', 'external_id')
+            'fields': ('name', 'logo', 'external_id', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
@@ -28,16 +28,16 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(VenueCategory)
 class VenueCategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'order', 'is_active', 'created_at')
+    list_display = ('title', 'order', 'is_active', 'parsing_id', 'created_at')
     list_editable = ('order', 'is_active')
-    search_fields = ('title',)
+    search_fields = ('title', 'parsing_id')
     list_filter = ('is_active', 'created_at')
     ordering = ('order', 'title')
     readonly_fields = ('created_at', 'updated_at')
     
     fieldsets = (
         (None, {
-            'fields': ('title', 'icon', 'order', 'is_active')
+            'fields': ('title', 'icon', 'order', 'is_active', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
@@ -48,9 +48,9 @@ class VenueCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):
-    list_display = ('name', 'company', 'location', 'rating', 'created_at')
+    list_display = ('name', 'company', 'location', 'rating', 'parsing_id', 'created_at')
     list_filter = ('company', 'category', 'created_at', 'updated_at')
-    search_fields = ('name', 'description', 'location', 'external_id')
+    search_fields = ('name', 'description', 'location', 'external_id', 'parsing_id')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
     filter_horizontal = ('category', 'facilities', 'tags')
@@ -58,7 +58,7 @@ class VenueAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (_('Basic Information'), {
-            'fields': ('name', 'company', 'description', 'external_id')
+            'fields': ('name', 'company', 'description', 'external_id', 'parsing_id')
         }),
         (_('Location'), {
             'fields': ('location', 'longitude', 'latitude')
@@ -117,17 +117,17 @@ class VenueWorkingHourAdmin(admin.ModelAdmin):
 
 @admin.register(VenueImage)
 class VenueImageAdmin(admin.ModelAdmin):
-    list_display = ('venue', 'order', 'is_main', 'created_at')
+    list_display = ('venue', 'order', 'is_main', 'parsing_id', 'created_at')
     list_editable = ('order', 'is_main')
     list_filter = ('is_main', 'venue', 'created_at')
-    search_fields = ('venue__name',)
+    search_fields = ('venue__name', 'parsing_id')
     ordering = ('venue__name', 'order')
     readonly_fields = ('created_at', 'updated_at')
     autocomplete_fields = ('venue',)
     
     fieldsets = (
         (None, {
-            'fields': ('venue', 'image', 'order', 'is_main')
+            'fields': ('venue', 'image', 'order', 'is_main', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
@@ -158,16 +158,16 @@ class VenueSocialMediaAdmin(admin.ModelAdmin):
 
 @admin.register(VenueReview)
 class VenueReviewAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'rating', 'is_approved', 'user', 'created_at')
+    list_display = ('full_name', 'rating', 'is_approved', 'user', 'parsing_id', 'created_at')
     list_filter = ('rating', 'is_approved', 'created_at')
-    search_fields = ('full_name', 'description', 'user__full_name')
+    search_fields = ('full_name', 'description', 'user__full_name', 'parsing_id')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
     autocomplete_fields = ('user',)
     
     fieldsets = (
         (None, {
-            'fields': ('user', 'full_name', 'description', 'rating', 'is_approved')
+            'fields': ('user', 'full_name', 'description', 'rating', 'is_approved', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
