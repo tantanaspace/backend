@@ -6,5 +6,4 @@ class ConfigDetailSerializer(serializers.ModelSerializer):
         model = GlobalSettings
         fields = (
             'backoffice_url',
-            'superadmin_url'
         )
