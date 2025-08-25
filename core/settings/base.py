@@ -428,3 +428,17 @@ SUBSCRIPTION_SETTINGS = {
     'RETRY_FAILED_PAYMENTS': True,
     'MAX_RETRY_ATTEMPTS': 3,
 }
+
+# Venue synchronization settings
+VENUE_SYNC = {
+    'GOOGLE_PLACES_API_KEY': env.str('GOOGLE_PLACES_API_KEY', default=''),
+    'QUERY': env.str('VENUE_SYNC_QUERY', default='restaurants in Tashkent'),
+    'REGION': env.str('VENUE_SYNC_REGION', default='uz'),
+    'LANGUAGE': env.str('VENUE_SYNC_LANGUAGE', default='en'),
+    'MAX_PHOTOS_PER_PLACE': env.int('VENUE_SYNC_MAX_PHOTOS', default=3),
+    'USE_MULTI_SEARCH': env.bool('VENUE_SYNC_USE_MULTI_SEARCH', default=True),
+    'COMPANY': {
+        'external_id': env.str('VENUE_SYNC_COMPANY_ID', default='google_places_import'),
+        'name': env.str('VENUE_SYNC_COMPANY_NAME', default='Google Places Import')
+    }
+}

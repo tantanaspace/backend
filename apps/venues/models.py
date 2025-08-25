@@ -10,6 +10,7 @@ class Company(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     logo = models.ImageField(_('Logo'), upload_to='companies/logos/')
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
+    parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:
         verbose_name = _('Company')
@@ -24,6 +25,7 @@ class VenueCategory(AbstractTimeStampedModel):
     icon = models.ImageField(_('Icon'), upload_to='venue/categories/')
     order = models.PositiveIntegerField(_('Order'))
     is_active = models.BooleanField(_('Is Active'), default=True)
+    parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:
         verbose_name = _('Venue Category')
@@ -48,6 +50,7 @@ class Venue(AbstractTimeStampedModel):
     tags = models.ManyToManyField('common.Tag', blank=True, verbose_name=_('Tags'))
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2, default=0)
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
+    parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:
         verbose_name = _('Venue')
@@ -99,6 +102,7 @@ class VenueImage(AbstractTimeStampedModel):
     image = models.ImageField(_('Image'), upload_to='venue/images/')
     is_main = models.BooleanField(_('Is Main'), default=False)
     venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, related_name='images', verbose_name=_('Venue'))
+    parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:
         verbose_name = _('Venue Image')
@@ -138,6 +142,7 @@ class VenueReview(AbstractTimeStampedModel):
     description = models.TextField(_('Description'))
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2)
     is_approved = models.BooleanField(_('Is Approved'), null=True, blank=True)
+    parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:
         verbose_name = _('Venue Review')
