@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # from leaflet.admin import LeafletGeoAdmin
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from apps.common.models import Country, GlobalSettings, CompanyProfile, Region, UserVenueFavourite, UserSearchHistory, Facility, Tag, Story
+from apps.common.models import Country, GlobalSettings, CompanyProfile, Region, UserVenueFavourite, UserSearchHistory, Facility, Tag, Story, OTPLog
 from apps.common.translation import *  # noqa
 
 
@@ -153,3 +153,86 @@ class StoryAdmin(admin.ModelAdmin):
             'fields': ('venue', 'media', 'link', 'is_active')
         }),
     )
+
+
+@admin.register(OTPLog)
+class OTPLogAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'phone_number',
+        'message_id',
+        'is_sent',
+        'is_delivered',
+        'status',
+        'sent_at',
+        'created_at'
+    )
+    
+    list_filter = (
+        'is_sent',
+        'is_delivered',
+        'status',
+        'sent_at',
+        'delivered_at',
+        'created_at'
+    )
+    
+    search_fields = (
+        'phone_number',
+        'message_id',
+        'text'
+    )
+    
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+        'message_id'
+    )
+    
+    ordering = ('-created_at',)
+    list_per_page = 50
+    
+    fieldsets = (
+        (_('Basic Information'), {
+            'fields': (
+                'message_id',
+                'phone_number',
+                'text'
+            )
+        }),
+        (_('SMS Status'), {
+            'fields': (
+                'is_sent',
+                'sent_at',
+                'is_delivered',
+                'delivered_at',
+                'status'
+            )
+        }),
+        (_('Logs'), {
+            'fields': (
+                'response_log',
+                'callback_log'
+            ),
+            'classes': ('collapse',)
+        }),
+        (_('Timestamps'), {
+            'fields': (
+                'created_at',
+                'updated_at'
+            ),
+            'classes': ('collapse',)
+        })
+    )
+    
+    def has_add_permission(self, request):
+        # OTPLog is created automatically, do not create manually
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        # Allow editing for status updates
+        return True
+    
+    def has_delete_permission(self, request, obj=None):
+        # Allow deletion for clearing old logs
+        return True

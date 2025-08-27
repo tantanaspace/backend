@@ -9,6 +9,7 @@ from apps.common.models import AbstractTimeStampedModel
 class Company(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     logo = models.ImageField(_('Logo'), upload_to='companies/logos/')
+    
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
@@ -25,7 +26,10 @@ class VenueCategory(AbstractTimeStampedModel):
     icon = models.ImageField(_('Icon'), upload_to='venue/categories/')
     order = models.PositiveIntegerField(_('Order'))
     is_active = models.BooleanField(_('Is Active'), default=True)
+    
+    external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
+    
 
     class Meta:
         verbose_name = _('Venue Category')
@@ -49,6 +53,7 @@ class Venue(AbstractTimeStampedModel):
     facilities = models.ManyToManyField('common.Facility', blank=True, verbose_name=_('Facilities'))
     tags = models.ManyToManyField('common.Tag', blank=True, verbose_name=_('Tags'))
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2, default=0)
+    
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
@@ -63,6 +68,8 @@ class Venue(AbstractTimeStampedModel):
 class VenueZone(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     photo_view = models.ImageField(_('Photo View'), upload_to='venue/zones/')
+    venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, verbose_name=_('Venue'))
+    
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
 
     class Meta:
@@ -102,6 +109,7 @@ class VenueImage(AbstractTimeStampedModel):
     image = models.ImageField(_('Image'), upload_to='venue/images/')
     is_main = models.BooleanField(_('Is Main'), default=False)
     venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, related_name='images', verbose_name=_('Venue'))
+    
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
     class Meta:

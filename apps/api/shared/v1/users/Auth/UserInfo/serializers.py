@@ -7,14 +7,15 @@ class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = (
-            'id',
-            'email',
-            'avatar',
-            'first_name',
-            'last_name',
-            'phone_number',
-            'role',
-            'language',
-            'date_joined'
+            "id",
+            "phone_number",
+            "full_name",
+            "date_of_birth",
+            "role",
+            "gender",
+            "language",
+            "avatar",
+            "date_joined",
+            "is_notification_enabled",
         )
         read_only_fields = fields 
