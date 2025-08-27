@@ -11,10 +11,12 @@ class CodeType(str, Enum):
 
 
 class CacheType(str, Enum):
-    FORGOT_PASSWORD = 'forgot-password'
-    CONFIRMED_FORGOT_PASSWORD = 'confirmed-forgot-password'
-    COMPANY_UPDATE_PASSWORD = 'company-update-password'
-
+    REGISTRATION_SEND_OTP = 'registration-send-otp'
+    CONFIRMED_REGISTRATION_SEND_OTP = 'confirmed-registration-send-otp'
+    FORGOT_PASSWORD_SEND_OTP = 'forgot-password-send-otp'
+    CONFIRMED_FORGOT_PASSWORD_SEND_OTP = 'confirmed-forgot-password-send-otp'
+    CHANGE_PHONE_NUMBER_SEND_OTP = 'change-phone-number-send-otp'
+    CONFIRMED_CHANGE_PHONE_NUMBER_SEND_OTP = 'confirmed-change-phone-number-send-otp'
 
 def generate_code(length: int, code_type: CodeType) -> str:
     if length <= 0:

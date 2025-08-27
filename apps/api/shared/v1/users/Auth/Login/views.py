@@ -20,23 +20,15 @@ class LoginAPIView(GenericAPIView):
 
         user = authenticate(
             request,
-            email=serializer.validated_data['email'],
+            phone_number=serializer.validated_data['phone_number'],
             password=serializer.validated_data['password']
         )
 
         if user is None:
-            raise AuthenticationFailed(_('Invalid email or password.'))
-
-        return Response({
-            "access_token": user.tokens["access_token"],
-            "refresh_token": user.tokens["refresh_token"],
-            "user": {
-                "email": user.email,
-                "phone_number": str(user.phone_number),
-                "role": user.role,
-                "language": user.language
-            }
-        }, status=status.HTTP_200_OK)
+            raise AuthenticationFailed(_('Invalid phone number or password.'))
+        
+        serializer = self.get_serializer({**user.tokens, 'user': user})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 __all__ = [

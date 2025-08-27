@@ -159,3 +159,35 @@ class Story(AbstractTimeStampedModel):
 
     def __str__(self):
         return f'Story - {self.venue if self.venue else "No Venue"}'
+
+
+class OTPLog(AbstractTimeStampedModel):
+    class CarrierStatus(models.TextChoices):
+        WAITING = 'WAITING', _("Waiting")
+        STORED = 'STORED', _("Stored")
+        ACCEPTED = 'ACCEPTED', _("Accepted")
+        REJECTED = 'REJECTED', _("Rejected")
+        DELIVERED = 'DELIVERED', _("Delivered")
+
+    message_id = models.CharField(_('Message ID'), max_length=255)
+    phone_number = PhoneNumberField(_('Phone Number'))
+    text = models.TextField(_('Text'))
+
+    is_sent = models.BooleanField(_('Is sent'), default=False)
+    sent_at = models.DateTimeField(_('Sent at'), null=True)
+
+    is_delivered = models.BooleanField(_('Is delivered'), default=False)
+    delivered_at = models.DateTimeField(_('Delivered at'), null=True)
+
+    response_log = models.JSONField(_('Response log'), default=dict, blank=True)
+
+    callback_log = models.JSONField(_('Callback log'), default=dict, blank=True)
+
+    status = models.CharField(_('Carrier status'), max_length=20, choices=CarrierStatus.choices,
+                              default=CarrierStatus.WAITING)
+
+    class Meta:
+        ordering = ('-id',)
+
+    def __str__(self):
+        return str(self.phone_number)

@@ -12,12 +12,17 @@ from apps.users.models import (
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     fieldsets = (
-        (None, {"fields": ("email", "password")}),
+        (None, {"fields": ("phone_number", "password")}),
         (_("Personal info"), {
             "fields": (
                 "full_name",
-                "phone_number",
+                "date_of_birth",
+                "gender",
                 "role",
+                "avatar",
+                "language",
+                "is_notification_enabled",
+                "telegram_id",
             )
         }),
         (_("Permissions"), {

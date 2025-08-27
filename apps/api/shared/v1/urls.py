@@ -15,11 +15,14 @@ from apps.api.shared.v1.common.Options import (
 )
 
 from apps.api.shared.v1.users.Auth import (
+    ChangePhoneNumberAPIView,
+    ConfirmationOTPAPIView,
     LoginAPIView,
+    RegistrationAPIView,
+    RequestOTPAPIView,
+    ResetPasswordAPIView,
     UserInfoAPIView,
     UserInfoUpdateAPIView,
-    ForgotPasswordSendEmailAPIView,
-    ForgotPasswordResetAPIView,
 )
 
 from apps.api.shared.v1.notifications import (
@@ -33,10 +36,17 @@ app_name = 'shared_v1'
 urlpatterns = [
     # users.auth
     path('auth/login/', LoginAPIView.as_view(), name='login'),
+
+    path('auth/request-otp/', RequestOTPAPIView.as_view(), name='request_otp'),
+    path('auth/confirmation-otp/', ConfirmationOTPAPIView.as_view(), name='confirmation_otp'),
+    
+    path('auth/registration/', RegistrationAPIView.as_view(), name='registration'),
+    path('auth/reset-password/', ResetPasswordAPIView.as_view(), name='reset_password'),
+    path('auth/change-phone-number/', ChangePhoneNumberAPIView.as_view(), name='change_phone_number'),
+    
     path('auth/user-info/', UserInfoAPIView.as_view(), name='user_info'),
     path('auth/user-info-update/', UserInfoUpdateAPIView.as_view(), name='user_info_update'),
-    path('auth/forgot-password-send-email/', ForgotPasswordSendEmailAPIView.as_view(), name='forgot_password_send_email'),
-    path('auth/forgot-password-reset/', ForgotPasswordResetAPIView.as_view(), name='forgot_password_reset'),
+    
     path("auth/token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     
     # notifications

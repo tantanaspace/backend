@@ -1,5 +1,8 @@
-from .ForgotPasswordReset import *  # noqa
-from .ForgotPasswordSendEmail import *  # noqa
+from .ChangePhoneNumber import *  # noqa
+from .ConfirmationOTP import *  # noqa
 from .Login import *  # noqa
+from .Registration import *  # noqa
+from .RequestOTP import *  # noqa
+from .ResetPassword import *  # noqa
 from .UserInfo import *  # noqa
 from .UserInfoUpdate import *  # noqa
