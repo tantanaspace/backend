@@ -103,7 +103,5 @@ class VenueListFilter(filters.FilterSet):
             'working_days',
             'min_rating',
             'max_rating',
-            'latitude',
-            'longitude',
             'company',
         )
