@@ -16,4 +16,6 @@ class VenueCategoryListSerializer(serializers.ModelSerializer):
         
     def get_icon_small(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.icon.thumbnail['200w'].url)
+        if obj.icon:
+            return request.build_absolute_uri(obj.icon.thumbnail['200x200'].url)
+        return None
