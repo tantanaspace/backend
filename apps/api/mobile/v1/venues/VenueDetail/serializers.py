@@ -43,9 +43,12 @@ class VenueDetailFacilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Facility
         fields = (
-            'id',
             'title',
             )
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return representation['title']
 
 class VenueDetailWorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,6 +77,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
     facilities = VenueDetailFacilitySerializer(many=True)
     social_links = VenueDetailSocialMediaSerializer(many=True)
     reviews_count = serializers.IntegerField(read_only=True)
+    working_hours = VenueDetailWorkingHourSerializer(many=True)
     
     class Meta:
         model = Venue
