@@ -7,6 +7,7 @@ from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet as FCMViewS
 
 from apps.api.shared.v1.common import (
     ConfigDetailAPIView,
+    EskizCallbackAPIView,
 )
 
 from apps.api.shared.v1.common.Options import (
@@ -63,4 +64,5 @@ urlpatterns = [
 
     # common
     path('config/', ConfigDetailAPIView.as_view(), name='config-detail'),
+    path('eskiz-callback/', EskizCallbackAPIView.as_view(), name='eskiz-callback'),
 ]

@@ -104,10 +104,10 @@ def send_sms(phone_number: PhoneNumber, message: str):
 
         try:
             response = eskiz_interface.send_sms(str(phone_number), message)
-            
+
             try:
                 response_json = response.json()
-                is_sent = response_json.get('status') == 200
+                is_sent = response.status_code == 200
                 message_id = response_json.get('id', message_id)
                 
                 response_log = {
