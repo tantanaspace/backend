@@ -83,7 +83,7 @@ class EskizInterface:
 
     @staticmethod
     def confirmation_sms_message(code: str):
-        return f"antana ilovasiga kirish uchun tasdiqlash kod: {code}"
+        return f"Tantana ilovasiga kirish uchun tasdiqlash kod: {code}"
     
     @staticmethod
     def forgot_password_sms_message(code: str):
