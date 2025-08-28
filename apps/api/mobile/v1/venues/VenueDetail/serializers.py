@@ -80,6 +80,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
     social_links = VenueDetailSocialMediaSerializer(many=True)
     reviews_count = serializers.IntegerField(read_only=True)
     working_hours = VenueDetailWorkingHourSerializer(many=True)
+    is_favourite = serializers.SerializerMethodField()
     
     class Meta:
         model = Venue
@@ -98,6 +99,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
             'working_hours',
             'images',
             'social_links',
+            'is_favourite',
         )
 
     def get_background_image_large(self, obj):
@@ -105,6 +107,12 @@ class VenueDetailSerializer(serializers.ModelSerializer):
         if hasattr(obj, 'background_image') and obj.background_image.image:
             return request.build_absolute_uri(obj.background_image.image.thumbnail['500x500'].url)
         return None
+        
+    def get_is_favourite(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.user_venue_favourites.filter(user=request.user).exists()
+        return False
         
         
     

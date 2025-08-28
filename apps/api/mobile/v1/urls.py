@@ -4,6 +4,8 @@ from apps.api.mobile.v1.common import (
     UserSearchHistoryListAPIView,
     UserSearchHistoryCreateAPIView,
     UserSearchHistoryDeleteAPIView,
+    UserVenueFavouriteToggleAPIView,
+    UserVenueFavouriteListAPIView,
 )
 
 from apps.api.mobile.v1.venues import (
@@ -28,4 +30,8 @@ urlpatterns = [
     path('search-histories/', UserSearchHistoryListAPIView.as_view(), name='search-history'),
     path('search-history-create/', UserSearchHistoryCreateAPIView.as_view(), name='search-history-create'),
     path('search-history/<int:pk>/delete/', UserSearchHistoryDeleteAPIView.as_view(), name='search-history-delete'),
+
+    # User venue favourite
+    path('favourite-venue-toggle/', UserVenueFavouriteToggleAPIView.as_view(), name='favourite-venue-toggle'),
+    path('favourite-venues/', UserVenueFavouriteListAPIView.as_view(), name='favourite-venue-list'),
 ]

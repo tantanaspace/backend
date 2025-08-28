@@ -100,8 +100,8 @@ class Region(AbstractTimeStampedModel):
 
 
 class UserVenueFavourite(AbstractTimeStampedModel):
-    venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, verbose_name=_('Venue'))
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name=_('User'))
+    venue = models.ForeignKey('venues.Venue', related_name='user_venue_favourites', on_delete=models.CASCADE, verbose_name=_('Venue'))
+    user = models.ForeignKey('users.User', related_name='user_venue_favourites', on_delete=models.CASCADE, verbose_name=_('User'))
 
     class Meta:
         verbose_name = _('User Venue Favourite')
@@ -114,7 +114,7 @@ class UserVenueFavourite(AbstractTimeStampedModel):
 
 class UserSearchHistory(AbstractTimeStampedModel):
     text = models.CharField(_('Text'), max_length=255)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name=_('User'))
+    user = models.ForeignKey('users.User', related_name='search_histories', on_delete=models.CASCADE, verbose_name=_('User'))
 
     class Meta:
         verbose_name = _('User Search History')
