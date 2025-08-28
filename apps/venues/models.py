@@ -1,14 +1,19 @@
 from ast import mod
 from re import T
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
+from versatileimagefield.fields import VersatileImageField
 
 from apps.common.models import AbstractTimeStampedModel
 
 
 class Company(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
-    logo = models.ImageField(_('Logo'), upload_to='companies/logos/')
+    logo = VersatileImageField(
+        _('Logo'), 
+        upload_to='companies/logos/'
+    )
     
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
@@ -23,7 +28,10 @@ class Company(AbstractTimeStampedModel):
 
 class VenueCategory(AbstractTimeStampedModel):
     title = models.CharField(_('Title'), max_length=255)
-    icon = models.ImageField(_('Icon'), upload_to='venue/categories/')
+    icon = VersatileImageField(
+        _('Icon'), 
+        upload_to='venue/categories/'
+    )
     order = models.PositiveIntegerField(_('Order'))
     is_active = models.BooleanField(_('Is Active'), default=True)
     
@@ -45,7 +53,7 @@ class Venue(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     background_image = models.OneToOneField('venues.VenueImage', on_delete=models.SET_NULL, null=True, blank=True,
                                             related_name='background_for', verbose_name=_('Background Image'))
-    category = models.ManyToManyField('venues.VenueCategory', blank=True, verbose_name=_('Categories'))
+    categories = models.ManyToManyField('venues.VenueCategory', blank=True, verbose_name=_('Categories'))
     description = models.TextField(_('Description'), blank=True, null=True)
     location = models.CharField(_('Location'), max_length=255)
     longitude = models.FloatField(_("Longitude"))
@@ -67,7 +75,10 @@ class Venue(AbstractTimeStampedModel):
 
 class VenueZone(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
-    photo_view = models.ImageField(_('Photo View'), upload_to='venue/zones/')
+    photo_view = VersatileImageField(
+        _('Photo View'), 
+        upload_to='venue/zones/'
+    )
     venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, verbose_name=_('Venue'))
     
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
@@ -93,7 +104,7 @@ class VenueWorkingHour(AbstractTimeStampedModel):
     opening_time = models.TimeField(_('Opening Time'))
     closing_time = models.TimeField(_('Closing Time'))
     weekday = models.CharField(_('Weekday'), max_length=10, choices=Weekday.choices)
-    venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, verbose_name=_('Venue'))
+    venue = models.ForeignKey('venues.Venue', related_name='working_hours', on_delete=models.CASCADE, verbose_name=_('Venue'))
 
     class Meta:
         verbose_name = _('Venue Working Hour')
@@ -106,7 +117,10 @@ class VenueWorkingHour(AbstractTimeStampedModel):
 
 class VenueImage(AbstractTimeStampedModel):
     order = models.PositiveIntegerField(_('Order'))
-    image = models.ImageField(_('Image'), upload_to='venue/images/')
+    image = VersatileImageField(
+        _('Image'), 
+        upload_to='venue/images/'
+    )
     is_main = models.BooleanField(_('Is Main'), default=False)
     venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, related_name='images', verbose_name=_('Venue'))
     
@@ -146,9 +160,10 @@ class VenueSocialMedia(AbstractTimeStampedModel):
 
 class VenueReview(AbstractTimeStampedModel):
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, blank=True, null=True, verbose_name=_('User'))
+    venue = models.ForeignKey('venues.Venue', related_name='reviews', on_delete=models.CASCADE, verbose_name=_('Venue'))
     full_name = models.CharField(_('Full Name'), max_length=255)
     description = models.TextField(_('Description'))
-    rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2)
+    rating = models.PositiveSmallIntegerField(_('Rating'), validators=[MinValueValidator(1), MaxValueValidator(5)])
     is_approved = models.BooleanField(_('Is Approved'), null=True, blank=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 

@@ -28,9 +28,5 @@ pycountry==24.6.1
 sentry-sdk
 python-telegram-bot==13.15
 
-
-
-
-
-
+django-versatileimagefield  
 django-leaflet==0.32.0

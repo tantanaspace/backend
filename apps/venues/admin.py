@@ -49,11 +49,11 @@ class VenueCategoryAdmin(admin.ModelAdmin):
 @admin.register(Venue)
 class VenueAdmin(admin.ModelAdmin):
     list_display = ('name', 'company', 'location', 'rating', 'parsing_id', 'created_at')
-    list_filter = ('company', 'category', 'created_at', 'updated_at')
+    list_filter = ('company', 'categories', 'created_at', 'updated_at')
     search_fields = ('name', 'description', 'location', 'external_id', 'parsing_id')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
-    filter_horizontal = ('category', 'facilities', 'tags')
+    filter_horizontal = ('categories', 'facilities', 'tags')
     autocomplete_fields = ('company', 'background_image')
     
     fieldsets = (
@@ -64,7 +64,7 @@ class VenueAdmin(admin.ModelAdmin):
             'fields': ('location', 'longitude', 'latitude')
         }),
         (_('Media & Categories'), {
-            'fields': ('background_image', 'category', 'facilities', 'tags')
+            'fields': ('background_image', 'categories', 'facilities', 'tags')
         }),
         (_('Rating'), {
             'fields': ('rating',)

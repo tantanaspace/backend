@@ -29,7 +29,7 @@ class User(AbstractUser):
 
     EMAIL_FIELD = None
     USERNAME_FIELD = "phone_number"
-    REQUIRED_FIELDS = ["full_name"]
+    REQUIRED_FIELDS = ["full_name", 'date_of_birth']
 
     phone_number = PhoneNumberField(_("Phone number"), max_length=15, unique=True)
     full_name = models.CharField(_("Full Name"), max_length=255)

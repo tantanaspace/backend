@@ -98,6 +98,7 @@ THIRD_PARTY_APPS = [
     "fcm_django",
     'nplusone.ext.django',
     'django_celery_beat',
+    'versatileimagefield',
     # 'leaflet',
 ]
 
