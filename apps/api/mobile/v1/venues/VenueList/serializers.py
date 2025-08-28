@@ -15,7 +15,9 @@ class MapVenueListCompanySerializer(serializers.ModelSerializer):
         
     def get_logo_small(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.logo.thumbnail['100w'].url)
+        if obj.logo:
+            return request.build_absolute_uri(obj.logo.thumbnail['100x100'].url)
+        return None
 
 
 class MapVenueListSerializer(serializers.ModelSerializer):
@@ -48,7 +50,9 @@ class VenueListCompanySerializer(serializers.ModelSerializer):
     
     def get_logo_small(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(obj.logo.thumbnail['100w'].url)
+        if obj.logo:
+            return request.build_absolute_uri(obj.logo.thumbnail['100x100'].url)
+        return None
     
 
 class VenueListSerializer(serializers.ModelSerializer):
@@ -69,7 +73,7 @@ class VenueListSerializer(serializers.ModelSerializer):
     def get_background_image_medium(self, obj):
         request = self.context.get('request')
         if hasattr(obj, 'background_image') and obj.background_image.image:
-            return request.build_absolute_uri(obj.background_image.image.thumbnail['300w'].url)
+            return request.build_absolute_uri(obj.background_image.image.thumbnail['300x300'].url)
         return None
     
 

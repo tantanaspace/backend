@@ -10,7 +10,7 @@ class VenueDetailAPIView(RetrieveAPIView):
         reviews_count=Count('reviews', distinct=True),
     )
     serializer_class = VenueDetailSerializer
-    lookup_url_kwarg = 'venue_pk'
+    lookup_url_kwarg = 'venue_id'
 
     
     
