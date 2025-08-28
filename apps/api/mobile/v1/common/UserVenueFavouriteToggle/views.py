@@ -21,12 +21,12 @@ class UserVenueFavouriteToggleAPIView(GenericAPIView):
         try:
             favourite = UserVenueFavourite.objects.get(venue=venue_id, user=user)
             favourite.delete()
-            status = status.HTTP_204_NO_CONTENT
+            response_status = status.HTTP_204_NO_CONTENT
         except UserVenueFavourite.DoesNotExist:
             UserVenueFavourite.objects.create(venue=venue_id, user=user)
-            status = status.HTTP_200_OK
+            response_status = status.HTTP_200_OK
         
-        return Response(status=status)
+        return Response(status=response_status)
 
 __all__ = [
     'UserVenueFavouriteToggleAPIView',
