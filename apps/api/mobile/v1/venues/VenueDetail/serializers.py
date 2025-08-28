@@ -27,7 +27,6 @@ class VenueDetailImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = VenueImage
         fields = (
-            'id',
             'image_small',
         )
 
@@ -36,6 +35,10 @@ class VenueDetailImageSerializer(serializers.ModelSerializer):
         if obj.image:
             return request.build_absolute_uri(obj.image.thumbnail['200x200'].url)
         return None
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return representation['image_small']
 
 
 class VenueDetailFacilitySerializer(serializers.ModelSerializer):
@@ -54,7 +57,6 @@ class VenueDetailWorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = VenueWorkingHour
         fields = (
-            'id',
             'weekday',
             'opening_time',
             'closing_time',
