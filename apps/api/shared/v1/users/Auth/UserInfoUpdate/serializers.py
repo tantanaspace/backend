@@ -9,4 +9,6 @@ class UserInfoUpdateSerializer(serializers.ModelSerializer):
             'date_of_birth',
             'gender',
             'avatar',
+            'is_notification_enabled',
+            'language'
         )
