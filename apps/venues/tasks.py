@@ -694,7 +694,7 @@ class VenueDataProcessor:
                     logger.debug(f"Added type category: {category_title}")
             
             if categories:
-                venue.category.set(categories)
+                venue.categories.set(categories)
                 logger.info(f"Set {len(categories)} categories for venue {venue.name}")
             else:
                 logger.warning(f"No categories found for venue {venue.name}")
@@ -711,7 +711,7 @@ class VenueDataProcessor:
                         "order": 0
                     }
                 )
-                venue.category.set([default_category])
+                venue.categories.set([default_category])
                 logger.info(f"Set default category for venue {venue.name}")
             except Exception as default_e:
                 logger.error(f"Failed to set default category for venue {venue.name}: {default_e}")
