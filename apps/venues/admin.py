@@ -158,7 +158,7 @@ class VenueSocialMediaAdmin(admin.ModelAdmin):
 
 @admin.register(VenueReview)
 class VenueReviewAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'rating', 'is_approved', 'user', 'parsing_id', 'created_at')
+    list_display = ('venue','full_name', 'rating', 'is_approved', 'user', 'parsing_id', 'created_at')
     list_filter = ('rating', 'is_approved', 'created_at')
     search_fields = ('full_name', 'description', 'user__full_name', 'parsing_id')
     ordering = ('-created_at',)
@@ -167,7 +167,7 @@ class VenueReviewAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('user', 'full_name', 'description', 'rating', 'is_approved', 'parsing_id')
+            'fields': ('user', 'venue', 'full_name', 'description', 'rating', 'is_approved', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
