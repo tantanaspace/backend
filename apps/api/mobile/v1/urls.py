@@ -1,5 +1,11 @@
 from django.urls import path
 
+from apps.api.mobile.v1.common import (
+    UserSearchHistoryListAPIView,
+    UserSearchHistoryCreateAPIView,
+    UserSearchHistoryDeleteAPIView,
+)
+
 from apps.api.mobile.v1.venues import (
         VenueListAPIView, 
         VenueCategoryListAPIView,
@@ -17,4 +23,9 @@ urlpatterns = [
     path('venue/<int:venue_id>/', VenueDetailAPIView.as_view(), name='venue-detail'),
     path('venue/<int:venue_id>/reviews/', VenueReviewListAPIView.as_view(), name='venue-review-list'),
     path('venue-review-create/', VenueReviewCreateAPIView.as_view(), name='venue-review-create'),
+
+    # common
+    path('search-histories/', UserSearchHistoryListAPIView.as_view(), name='search-history'),
+    path('search-history-create/', UserSearchHistoryCreateAPIView.as_view(), name='search-history-create'),
+    path('search-history/<int:pk>/delete/', UserSearchHistoryDeleteAPIView.as_view(), name='search-history-delete'),
 ]
