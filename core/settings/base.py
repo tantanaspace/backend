@@ -448,6 +448,6 @@ VENUE_SYNC = {
 ESKIZ_CREDENTIALS = {
     'username': env.str('ESKIZ_USERNAME', default='mirzohid.pm@gmail.com'),
     'secret_key': env.str('ESKIZ_SECRET_KEY', default='9mj0NSIq8FiYqwCN9C3ap0DUWFdS2xV82f51ztZH'),
-    'callback_url': env.str('ESKIZ_CALLBACK_URL', default='https://api.tantana.group/api/v1/common/eskiz-callback/'),
+    'callback_url': env.str('ESKIZ_CALLBACK_URL', default='https://api.tantana.group/api/v1/eskiz-callback/'),
     'from_number': env.str('ESKIZ_FROM_NUMBER', default='4546'),
 }
