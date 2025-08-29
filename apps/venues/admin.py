@@ -28,8 +28,8 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(VenueCategory)
 class VenueCategoryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'order', 'is_active', 'parsing_id', 'created_at')
-    list_editable = ('order', 'is_active')
+    list_display = ('title', 'order', 'recommended', 'is_active', 'parsing_id', 'created_at')
+    list_editable = ('order', 'recommended', 'is_active')
     search_fields = ('title', 'parsing_id')
     list_filter = ('is_active', 'created_at')
     ordering = ('order', 'title')
@@ -37,7 +37,7 @@ class VenueCategoryAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('title', 'icon', 'order', 'is_active', 'parsing_id')
+            'fields': ('title', 'icon', 'order', 'recommended', 'is_active', 'parsing_id')
         }),
         (_('Timestamps'), {
             'fields': ('created_at', 'updated_at'),
