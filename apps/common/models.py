@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.gis.db import models as gis_models
 from phonenumber_field.modelfields import PhoneNumberField
+from versatileimagefield.fields import VersatileImageField
 
 from solo.models import SingletonModel
 
@@ -150,6 +151,12 @@ class Tag(AbstractTimeStampedModel):
 class Story(AbstractTimeStampedModel):
     venue = models.ForeignKey('venues.Venue', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Venue'))
     media = models.FileField(_('Media'), upload_to='stories/')
+    background_image = VersatileImageField(
+        _('Background Image'),
+        upload_to='stories/background_images/',
+        blank=True,
+        null=True
+    )
     link = models.URLField(_('Link'))
     is_active = models.BooleanField(_("Is Active"), default=True)
 

@@ -13,6 +13,9 @@ from apps.api.shared.v1.common import (
 from apps.api.shared.v1.common.Options import (
     RegionOptionListAPIView,
     CountryOptionListAPIView,
+    FacilityListAPIView,
+    TagListAPIView,
+    VenueCategoryListAPIView,
 )
 
 from apps.api.shared.v1.users.Auth import (
@@ -61,6 +64,9 @@ urlpatterns = [
     # common.options
     path('options/regions/', RegionOptionListAPIView.as_view(), name='region-option-list'),
     path('options/countries/', CountryOptionListAPIView.as_view(), name='country-option-list'),
+    path('options/facilities/', FacilityListAPIView.as_view(), name='facility-option-list'),
+    path('options/tags/', TagListAPIView.as_view(), name='tag-option-list'),
+    path('options/venue-categories/', VenueCategoryListAPIView.as_view(), name='venue-category-option-list'),
 
     # common
     path('config/', ConfigDetailAPIView.as_view(), name='config-detail'),

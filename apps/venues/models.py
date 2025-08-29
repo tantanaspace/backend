@@ -27,6 +27,11 @@ class Company(AbstractTimeStampedModel):
 
 
 class VenueCategory(AbstractTimeStampedModel):
+    class CategoryType(models.TextChoices):
+        VENUE_TYPE = 'venue_type', _('Venue Type')
+        CUISINE_TYPE = 'cuisine_type', _('Cuisine Type')
+
+    category_type = models.CharField(_('Category Type'), max_length=50, choices=CategoryType.choices, default=CategoryType.VENUE_TYPE)
     title = models.CharField(_('Title'), max_length=255)
     icon = VersatileImageField(
         _('Icon'), 
@@ -34,6 +39,7 @@ class VenueCategory(AbstractTimeStampedModel):
     )
     order = models.PositiveIntegerField(_('Order'))
     is_active = models.BooleanField(_('Is Active'), default=True)
+    recommended = models.BooleanField(_('Recommended'), default=False)
     
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
@@ -53,7 +59,7 @@ class Venue(AbstractTimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     background_image = models.OneToOneField('venues.VenueImage', on_delete=models.SET_NULL, null=True, blank=True,
                                             related_name='background_for', verbose_name=_('Background Image'))
-    categories = models.ManyToManyField('venues.VenueCategory', blank=True, verbose_name=_('Categories'))
+    categories = models.ManyToManyField('venues.VenueCategory', related_name='venues', blank=True, verbose_name=_('Categories'))
     description = models.TextField(_('Description'), blank=True, null=True)
     location = models.CharField(_('Location'), max_length=255)
     longitude = models.FloatField(_("Longitude"))
@@ -61,6 +67,7 @@ class Venue(AbstractTimeStampedModel):
     facilities = models.ManyToManyField('common.Facility', blank=True, verbose_name=_('Facilities'))
     tags = models.ManyToManyField('common.Tag', blank=True, verbose_name=_('Tags'))
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2, default=0)
+    is_active = models.BooleanField(_('Is Active'), default=True)
     
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))

@@ -7,6 +7,7 @@ from apps.api.mobile.v1.common.UserVenueFavouriteList.serializers import UserFav
 class UserVenueFavouriteListAPIView(ListAPIView):    
     serializer_class = UserFavouriteVenueListSerializer
     permission_classes = (IsAuthenticated,)
+    search_fields = ('name',)
     
     def get_queryset(self):
         user = self.request.user
