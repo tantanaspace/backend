@@ -67,6 +67,7 @@ class VenueDetailSocialMediaSerializer(serializers.ModelSerializer):
         model = VenueSocialMedia    
         fields = (
             'id',
+            'title',
             'social_type',
             'link',
         )

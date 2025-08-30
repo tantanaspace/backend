@@ -151,6 +151,7 @@ class VenueSocialMedia(AbstractTimeStampedModel):
         TIKTOK = 'tiktok', _('TikTok')
         OTHER = 'other', _('Other')
 
+    title = models.CharField(_('Title'), max_length=255)
     social_type = models.CharField(_('Social Type'), max_length=50, choices=SocialType.choices)
     link = models.URLField(_('Link'))
     is_active = models.BooleanField(_('Is Active'), default=True)
