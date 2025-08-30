@@ -122,7 +122,7 @@ class FacilityAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': ('title',)
+            'fields': ('title', 'icon')
         }),
     )
 

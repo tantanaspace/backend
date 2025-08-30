@@ -128,6 +128,7 @@ class UserSearchHistory(AbstractTimeStampedModel):
 
 class Facility(AbstractTimeStampedModel):
     title = models.CharField(_('Title'), max_length=255)
+    icon = VersatileImageField(_('Icon'), upload_to='facilities/icons/')
 
     class Meta:
         verbose_name = _('Facility')
