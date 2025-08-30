@@ -94,7 +94,6 @@ class GooglePlacesClient:
             'spanish_restaurant', 'steak_house', 'sushi_restaurant', 'tea_house', 'thai_restaurant', 'turkish_restaurant', 'vegan_restaurant',
             'vegetarian_restaurant', 'vietnamese_restaurant', 'wine_bar',
         ]
-        place_types = ['cafe']
         
         for coordinate in tashkent_grid_coordinates:
             for place_type in place_types:
