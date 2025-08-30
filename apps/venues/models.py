@@ -35,9 +35,11 @@ class VenueCategory(AbstractTimeStampedModel):
     title = models.CharField(_('Title'), max_length=255)
     icon = VersatileImageField(
         _('Icon'), 
-        upload_to='venue/categories/'
+        upload_to='venue/categories/',
+        blank=True,
+        null=True
     )
-    order = models.PositiveIntegerField(_('Order'))
+    order = models.PositiveIntegerField(_('Order'), default=0)
     is_active = models.BooleanField(_('Is Active'), default=True)
     recommended = models.BooleanField(_('Recommended'), default=False)
     
