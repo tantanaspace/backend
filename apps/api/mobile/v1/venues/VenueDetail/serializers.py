@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.common.models import Facility, Tag
-from apps.venues.models import Venue, Company, VenueImage, VenueWorkingHour, VenueSocialMedia
+from apps.common.models import Facility
+from apps.venues.models import Venue, Company, VenueImage, VenueWorkingHour, VenueSocialMedia, VenueCategory
 
 class VenueDetailCompanySerializer(serializers.ModelSerializer):
     logo_small = serializers.SerializerMethodField()
@@ -71,6 +71,15 @@ class VenueDetailSocialMediaSerializer(serializers.ModelSerializer):
             'link',
         )
 
+class VenueDetailVenueCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenueCategory
+        fields = (
+            'id',
+            'title',
+            'category_type'
+        )
+
 
 class VenueDetailSerializer(serializers.ModelSerializer):
     company = VenueDetailCompanySerializer()
@@ -81,6 +90,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
     reviews_count = serializers.IntegerField(read_only=True)
     working_hours = VenueDetailWorkingHourSerializer(many=True)
     is_favourite = serializers.SerializerMethodField()
+    categories = VenueDetailVenueCategorySerializer(many=True)
     
     class Meta:
         model = Venue
@@ -96,6 +106,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
             'rating',
             'reviews_count',
             'facilities',
+            'categories',
             'working_hours',
             'images',
             'social_links',
