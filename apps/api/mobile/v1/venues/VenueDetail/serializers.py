@@ -42,16 +42,20 @@ class VenueDetailImageSerializer(serializers.ModelSerializer):
 
 
 class VenueDetailFacilitySerializer(serializers.ModelSerializer):
-
+    icon_small = serializers.SerializerMethodField()
+    
     class Meta:
         model = Facility
         fields = (
             'title',
+            'icon_small',
             )
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        return representation['title']
+    def get_icon_small(self, obj):
+        request = self.context.get('request')
+        if obj.icon:
+            return request.build_absolute_uri(obj.icon.thumbnail['50x50'].url)
+        return None
 
 class VenueDetailWorkingHourSerializer(serializers.ModelSerializer):
     class Meta:
