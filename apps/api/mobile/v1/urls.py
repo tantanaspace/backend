@@ -41,5 +41,5 @@ urlpatterns = [
     path('favourite-venues/', UserVenueFavouriteListAPIView.as_view(), name='favourite-venue-list'),
 
     path('stories/', StoryListAPIView.as_view(), name='story-list'),
-    path('story/<int:pk>/', StoryDetailAPIView.as_view(), name='story-detail'),
+    path('story/<int:story_group_id>/', StoryDetailAPIView.as_view(), name='story-detail'),
 ]

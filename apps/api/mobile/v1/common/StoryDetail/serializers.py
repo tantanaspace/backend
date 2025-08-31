@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.common.models import Story
+from apps.common.models import StoryItem
 from apps.venues.models import Venue, Company, VenueCategory
 
 class StoryDetailVenueCategorySerializer(serializers.ModelSerializer):
@@ -46,10 +46,11 @@ class StoryDetailSerializer(serializers.ModelSerializer):
     venue = StoryDetailVenueSerializer()
     
     class Meta:
-        model = Story
+        model = StoryItem
         fields = (
             'id',
             'media',
+            'venue',
+            'description',
             'link',
-            'venue'
         )
