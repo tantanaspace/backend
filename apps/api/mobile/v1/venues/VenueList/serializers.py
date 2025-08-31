@@ -38,7 +38,7 @@ class VenueListSerializer(serializers.ModelSerializer):
         
     def get_background_image_medium(self, obj):
         request = self.context.get('request')
-        if hasattr(obj, 'background_image') and obj.background_image.image:
+        if hasattr(obj, 'background_image') and obj.background_image and obj.background_image.image:
             return request.build_absolute_uri(obj.background_image.image.thumbnail['300x300'].url)
         return None
     
