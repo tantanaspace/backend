@@ -5,4 +5,4 @@ from apps.common.models import Facility
 class FacilityListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Facility
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'quick_access')

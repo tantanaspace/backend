@@ -8,7 +8,7 @@ class FacilityListAPIView(ListAPIView):
     queryset = Facility.objects.all()
     serializer_class = FacilityListSerializer
     permission_classes = [AllowAny]
-    filterset_fields = ('id', 'title')
+    filterset_fields = ('id', 'title', 'quick_access')
     search_fields = ('title',)
     ordering = ('id', 'title')
 
