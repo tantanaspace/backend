@@ -17,6 +17,7 @@ from apps.api.mobile.v1.venues import (
         VenueReviewListAPIView,
         VenueReviewCreateAPIView,
         RecommendedVenuesAPIView,
+        MapVenueListAPIView,
     )
 
 app_name = 'mobile_v1'
@@ -26,6 +27,7 @@ urlpatterns = [
     path('venues/', VenueListAPIView.as_view(), name='venue-list'),
     path('venue-categories/', VenueCategoryListAPIView.as_view(), name='venue-category-list'),
     path('recommended-venues/', RecommendedVenuesAPIView.as_view(), name='recommended-venues'),
+    path('map-venues/', MapVenueListAPIView.as_view(), name='map-venues'),
     path('venue/<int:venue_id>/', VenueDetailAPIView.as_view(), name='venue-detail'),
     path('venue/<int:venue_id>/reviews/', VenueReviewListAPIView.as_view(), name='venue-review-list'),
     path('venue-review-create/', VenueReviewCreateAPIView.as_view(), name='venue-review-create'),
