@@ -1,6 +1,6 @@
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 # from django.contrib.gis.db import models as gis_models
 from phonenumber_field.modelfields import PhoneNumberField
 from versatileimagefield.fields import VersatileImageField
@@ -149,24 +149,61 @@ class Tag(AbstractTimeStampedModel):
         return self.title
 
 
-class Story(AbstractTimeStampedModel):
-    venue = models.ForeignKey('venues.Venue', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Venue'))
-    media = models.FileField(_('Media'), upload_to='stories/')
+class StoryGroup(AbstractTimeStampedModel):
+    """Story group/page that contains multiple story items"""
+    title = models.CharField(_('Title'), max_length=255, blank=True)
     background_image = VersatileImageField(
         _('Background Image'),
         upload_to='stories/background_images/',
         blank=True,
         null=True
     )
-    link = models.URLField(_('Link'))
     is_active = models.BooleanField(_("Is Active"), default=True)
-
+    expires_at = models.DateTimeField(_('Expires At'), null=True, blank=True)
+    order = models.PositiveIntegerField(_('Order'), default=0)
+    
     class Meta:
-        verbose_name = _('Story')
-        verbose_name_plural = _('Stories')
-
+        verbose_name = _('Story Group')
+        verbose_name_plural = _('Story Groups')
+        ordering = ('order', '-created_at')
+    
     def __str__(self):
-        return f'Story - {self.venue if self.venue else "No Venue"}'
+        return f'Story Group - {self.title or "Untitled"} ({self.story_items.count()} items)'
+    
+    @property
+    def is_expired(self):
+        if self.expires_at:
+            return timezone.now() > self.expires_at
+        return False
+
+
+class StoryItem(AbstractTimeStampedModel):
+    """Individual story item within a story group"""
+    story_group = models.ForeignKey(StoryGroup, on_delete=models.CASCADE, related_name='story_items', verbose_name=_('Story Group'))
+    
+    media = models.FileField(_('Media'), upload_to='stories/')
+    venue = models.ForeignKey('venues.Venue', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=_('Venue'))
+    description = models.TextField(_('Text'), blank=True)
+    link = models.URLField(_('Link'), blank=True)
+    order = models.PositiveIntegerField(_('Order'), default=0)
+    is_active = models.BooleanField(_("Is Active"), default=True)
+    
+    class Meta:
+        verbose_name = _('Story Item')
+        verbose_name_plural = _('Story Items')
+        ordering = ('story_group', 'order', 'created_at')
+    
+    def __str__(self):
+        return f'Story Item {self.order} - {self.story_group}'
+    
+    def save(self, *args, **kwargs):
+        if not self.order:
+            # Auto-assign order if not set
+            last_order = StoryItem.objects.filter(story_group=self.story_group).aggregate(
+                models.Max('order')
+            )['order__max'] or 0
+            self.order = last_order + 1
+        super().save(*args, **kwargs)
 
 
 class OTPLog(AbstractTimeStampedModel):

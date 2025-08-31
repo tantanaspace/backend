@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # from leaflet.admin import LeafletGeoAdmin
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from apps.common.models import Country, GlobalSettings, CompanyProfile, Region, UserVenueFavourite, UserSearchHistory, Facility, Tag, Story, OTPLog
+from apps.common.models import Country, GlobalSettings, CompanyProfile, Region, UserVenueFavourite, UserSearchHistory, Facility, Tag, OTPLog, StoryGroup, StoryItem
 from apps.common.translation import *  # noqa
 
 
@@ -140,19 +140,77 @@ class TagAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(Story)
-class StoryAdmin(admin.ModelAdmin):
-    list_display = ('venue', 'link', 'is_active', 'created_at')
-    list_filter = ('is_active', 'venue__company', 'created_at')
-    search_fields = ('venue__name', 'link')
-    ordering = ('-created_at',)
-    autocomplete_fields = ('venue',)
+class StoryItemInline(admin.TabularInline):
+    model = StoryItem
+    extra = 0
+    fields = ('media', 'venue', 'description', 'link', 'order', 'is_active')
+    ordering = ('order',)
+    autocomplete_fields = ('story_group', 'venue')
+
+
+@admin.register(StoryGroup)
+class StoryGroupAdmin(admin.ModelAdmin):
+    list_display = ('title', 'background_image_preview', 'story_items_count', 'is_active', 'is_expired', 'order', 'created_at')
+    list_filter = ('is_active', 'created_at', 'expires_at')
+    search_fields = ('title',)
+    ordering = ('order', '-created_at')
+    readonly_fields = ('created_at', 'updated_at', 'background_image_preview')
+    list_per_page = 25
+    list_max_show_all = 500
+    
+    inlines = [StoryItemInline]
     
     fieldsets = (
-        (None, {
-            'fields': ('venue', 'media', 'link', 'is_active')
-        }),
+        (None, {'fields': ('title', 'background_image', 'is_active', 'order')}),
+        (_('Expiration'), {'fields': ('expires_at',)}),
+        (_('Timestamps'), {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
+    
+    def story_items_count(self, obj):
+        return obj.story_items.count()
+    story_items_count.short_description = _('Story Items')
+    
+    def background_image_preview(self, obj):
+        if obj.background_image:
+            return f'<img src="{obj.background_image.thumbnail["100x100"].url}" width="50" height="50" />'
+        return '-'
+    background_image_preview.short_description = _('Background Image')
+    background_image_preview.allow_tags = True
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('story_items')
+
+
+@admin.register(StoryItem)
+class StoryItemAdmin(admin.ModelAdmin):
+    list_display = ('story_group', 'venue', 'media_preview', 'order', 'is_active', 'created_at')
+    list_filter = ('is_active', 'venue', 'story_group', 'created_at')
+    search_fields = ('story_group__title', 'venue__name', 'description')
+    ordering = ('story_group', 'order')
+    readonly_fields = ('created_at', 'updated_at', 'media_preview')
+    autocomplete_fields = ('story_group', 'venue')
+    list_per_page = 100
+    list_max_show_all = 1000
+    list_select_related = ('story_group', 'venue')
+    
+    fieldsets = (
+        (None, {'fields': ('story_group', 'venue', 'media', 'order', 'is_active')}),
+        (_('Content'), {'fields': ('description', 'link')}),
+        (_('Timestamps'), {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
+    )
+    
+    def media_preview(self, obj):
+        if obj.media:
+            if obj.media.name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                return f'<img src="{obj.media.url}" width="50" height="50" />'
+            else:
+                return f'<video width="50" height="50" controls><source src="{obj.media.url}"></video>'
+        return '-'
+    media_preview.short_description = _('Media Preview')
+    media_preview.allow_tags = True
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('story_group', 'venue')
 
 
 @admin.register(OTPLog)
