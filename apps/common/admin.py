@@ -116,13 +116,13 @@ class UserSearchHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(Facility)
 class FacilityAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('title', 'quick_access')
     search_fields = ('title',)
     ordering = ('title',)
     
     fieldsets = (
         (None, {
-            'fields': ('title', 'icon')
+            'fields': ('title', 'icon', 'quick_access')
         }),
     )
 
