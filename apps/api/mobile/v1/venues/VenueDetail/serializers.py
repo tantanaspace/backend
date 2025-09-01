@@ -116,6 +116,7 @@ class VenueDetailSerializer(serializers.ModelSerializer):
             'images',
             'social_links',
             'is_favourite',
+            'phone_number',
         )
 
     def get_background_image_large(self, obj):
