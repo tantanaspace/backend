@@ -124,7 +124,46 @@ shared_swagger_urlpatterns_v1 = [
 
 
 
+webapp_schema_view_v1 = get_schema_view(
+    openapi.Info(
+        title=swagger_title,
+        default_version="v1",
+        description=swagger_description,
+        terms_of_service=swagger_terms_of_service,
+        contact=openapi.Contact(email=swagger_contact_email),
+        license=openapi.License(name=swagger_license_name),
+    ),
+    public=True,
+    generator_class=BothHttpAndHttpsSchemaGenerator,
+    permission_classes=[permissions.AllowAny, ],  # todo: change to permissions.IsAuthenticated
+    patterns=[
+        path("api/webapp/v1/", include("apps.api.webapp.v1.urls", namespace='webapp_v1'))
+    ]
+)
+
+
+webapp_swagger_urlpatterns_v1 = [
+    re_path(
+        r"^api/webapp/v1/docs(?P<format>\.json|\.yaml)$",
+        webapp_schema_view_v1.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    re_path(
+        r"^api/webapp/v1/docs/$",
+        webapp_schema_view_v1.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^api/webapp/v1/redoc/$",
+        webapp_schema_view_v1.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc",
+    ),
+]
+
+
+
 swagger_urlpatterns = (
     mobile_swagger_urlpatterns_v1 
     + shared_swagger_urlpatterns_v1
+    + webapp_swagger_urlpatterns_v1
 )

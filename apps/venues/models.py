@@ -4,6 +4,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 from versatileimagefield.fields import VersatileImageField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.common.models import AbstractTimeStampedModel
 
@@ -70,6 +71,7 @@ class Venue(AbstractTimeStampedModel):
     tags = models.ManyToManyField('common.Tag', blank=True, verbose_name=_('Tags'))
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=2, default=0)
     is_active = models.BooleanField(_('Is Active'), default=True)
+    phone_number = PhoneNumberField(_('Phone Number'), max_length=15, blank=True, null=True)
     
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))

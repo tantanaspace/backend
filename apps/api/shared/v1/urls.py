@@ -22,6 +22,7 @@ from apps.api.shared.v1.users.Auth import (
     ChangePhoneNumberAPIView,
     ConfirmationOTPAPIView,
     LoginAPIView,
+    TelegramLoginAPIView,
     RegistrationAPIView,
     RequestOTPAPIView,
     ResetPasswordAPIView,
@@ -40,7 +41,7 @@ app_name = 'shared_v1'
 urlpatterns = [
     # users.auth
     path('auth/login/', LoginAPIView.as_view(), name='login'),
-
+    path('auth/telegram-login/', TelegramLoginAPIView.as_view(), name='telegram_login'),
     path('auth/request-otp/', RequestOTPAPIView.as_view(), name='request_otp'),
     path('auth/confirmation-otp/', ConfirmationOTPAPIView.as_view(), name='confirmation_otp'),
     
