@@ -1,6 +1,7 @@
 from .ChangePhoneNumber import *  # noqa
 from .ConfirmationOTP import *  # noqa
 from .Login import *  # noqa
+from .TelegramLogin import *  # noqa
 from .Registration import *  # noqa
 from .RequestOTP import *  # noqa
 from .ResetPassword import *  # noqa

@@ -451,3 +451,9 @@ ESKIZ_CREDENTIALS = {
     'callback_url': env.str('ESKIZ_CALLBACK_URL', default='https://api.tantana.group/api/v1/eskiz-callback/'),
     'from_number': env.str('ESKIZ_FROM_NUMBER', default='4546'),
 }
+
+# TELEGRAM SETTINGS
+TELEGRAM_BOT = {
+    'token': env.str('TELEGRAM_BOT_TOKEN', default=''),
+    'webapp_url': env.str('TELEGRAM_WEBAPP_URL', default='https://t.me/your_bot_username/app'),
+}

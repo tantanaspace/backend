@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from phonenumber_field.modelfields import PhoneNumberField
@@ -40,6 +41,7 @@ class User(AbstractUser):
     avatar = models.ImageField(_('Avatar'), upload_to='users/avatar', null=True, blank=True)
     is_notification_enabled = models.BooleanField(default=True, verbose_name=_("Notification Enabled"))
     telegram_id = models.CharField(_('Telegram ID'), max_length=255, unique=True, null=True, blank=True)
+    venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, null=True, blank=True)
 
     objects = UserManager()
 
@@ -55,3 +57,7 @@ class User(AbstractUser):
         token = RefreshToken.for_user(self)
         token['role'] = self.role
         return {"access_token": str(token.access_token), "refresh_token": str(token)}
+
+    def clean(self):
+        if self.role == self.Role.HOST and self.venue is None:
+            raise ValidationError({'venue': _("Venue is required for host")})
