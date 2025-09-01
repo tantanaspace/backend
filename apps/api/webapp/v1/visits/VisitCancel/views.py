@@ -25,7 +25,7 @@ class VisitCancelAPIView(GenericAPIView):
         visit.cancel_reason = serializer.validated_data['cancel_reason']
         visit.status = Visit.VisitStatus.CANCELLED
         visit.save(update_fields=['cancelled_at', 'cancel_reason', 'status'])
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'success': True}, status=status.HTTP_200_OK)
 
 
 __all__ = [

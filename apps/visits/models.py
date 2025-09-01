@@ -28,6 +28,7 @@ class Visit(models.Model):
     venue = models.ForeignKey('venues.Venue', on_delete=models.CASCADE, related_name='visits', verbose_name=_('Venue'))
     zone = models.ForeignKey('venues.VenueZone', on_delete=models.SET_NULL, related_name='visits', null=True, blank=True,
                              verbose_name=_('Zone'))
+    table_number = models.CharField(_('Table Number'), max_length=255, null=True, blank=True)
 
     booked_date = models.DateField(_('Booked Date'))
     booked_time = models.TimeField(_('Booked Time'))
