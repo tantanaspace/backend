@@ -49,6 +49,7 @@ class UserAdmin(BaseUserAdmin):
             "fields": (
                 "phone_number",
                 "full_name",
+                "date_of_birth",
                 "role",
                 "venue",
                 "password1",
