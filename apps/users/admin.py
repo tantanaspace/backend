@@ -19,6 +19,7 @@ class UserAdmin(BaseUserAdmin):
                 "date_of_birth",
                 "gender",
                 "role",
+                "venue",
                 "avatar",
                 "language",
                 "is_notification_enabled",
@@ -49,6 +50,7 @@ class UserAdmin(BaseUserAdmin):
                 "phone_number",
                 "full_name",
                 "role",
+                "venue",
                 "password1",
                 "password2"
             ),
