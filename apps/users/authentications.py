@@ -26,7 +26,8 @@ class TelegramWebAppAuthentication(BaseAuthentication):
         if not parsed_data:
             raise AuthenticationFailed("Invalid Telegram initData signature")
 
-        user_json = parsed_data.get("user")
+        # user JSON
+        user_json = urllib.parse.unquote(parsed_data.get("user", ""))
         if not user_json:
             raise AuthenticationFailed("No user data in initData")
 
@@ -53,9 +54,14 @@ class TelegramWebAppAuthentication(BaseAuthentication):
             return None
 
         data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(parsed_data.items()))
-        secret_key = hashlib.sha256(settings.TELEGRAM_BOT['token'].encode()).digest()
-        hash_calculated = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+        secret_key = hmac.new(
+            b"WebAppData", settings.TELEGRAM_BOT["token"].encode(), hashlib.sha256
+        ).digest()
+        hash_calculated = hmac.new(
+            secret_key, data_check_string.encode(), hashlib.sha256
+        ).hexdigest()
 
         if not hmac.compare_digest(hash_calculated, hash_received):
             return None
+
         return parsed_data
