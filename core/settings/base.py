@@ -454,6 +454,6 @@ ESKIZ_CREDENTIALS = {
 
 # TELEGRAM SETTINGS
 TELEGRAM_BOT = {
-    'token': env.str('TELEGRAM_BOT_TOKEN', default=''),
+    'token': env.str('TELEGRAM_BOT_TOKEN', default='7826447342:AAGX2SSnJwrrVpkTpq_pQcaClVmxq2SLqw0'),
     'webapp_url': env.str('TELEGRAM_WEBAPP_URL', default='https://t.me/your_bot_username/app'),
 }
