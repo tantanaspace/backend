@@ -7,3 +7,4 @@ from .RequestOTP import *  # noqa
 from .ResetPassword import *  # noqa
 from .UserInfo import *  # noqa
 from .UserInfoUpdate import *  # noqa
+from .DeleteAccount import *  # noqa

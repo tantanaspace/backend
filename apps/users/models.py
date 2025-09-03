@@ -2,14 +2,16 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
+from apps.common.models import AbstractSoftDeleteModel
 from rest_framework_simplejwt.tokens import RefreshToken
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.users.managers import UserManager
 
 
-class User(AbstractUser):
+class User(AbstractUser, AbstractSoftDeleteModel):
     class Language(models.TextChoices):
         ENGLISH = "en", _("English")
         RUSSIAN = "ru", _("Russian")
@@ -61,3 +63,10 @@ class User(AbstractUser):
     def clean(self):
         if self.role == self.Role.HOST and self.venue is None:
             raise ValidationError({'venue': _("Venue is required for host")})
+
+    def delete(self, using=None, keep_parents=False):
+        self.is_deleted = True
+        self.is_active = False
+        self.deleted_at = timezone.now()
+        self.phone_number = f"deleted_{self.phone_number}"
+        self.save(update_fields=['is_deleted', 'deleted_at', 'phone_number', 'is_active'])
