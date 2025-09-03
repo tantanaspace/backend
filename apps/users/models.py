@@ -34,7 +34,7 @@ class User(AbstractUser, AbstractSoftDeleteModel):
     USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = ["full_name", 'date_of_birth']
 
-    phone_number = PhoneNumberField(_("Phone number"), max_length=15, unique=True)
+    phone_number = PhoneNumberField(_("Phone number"), max_length=64, unique=True)
     full_name = models.CharField(_("Full Name"), max_length=255)
     date_of_birth = models.DateField(_("Date of Birth"))
     role = models.CharField(_("Role"), max_length=20, choices=Role.choices, default=Role.USER)
@@ -68,5 +68,5 @@ class User(AbstractUser, AbstractSoftDeleteModel):
         self.is_deleted = True
         self.is_active = False
         self.deleted_at = timezone.now()
-        self.phone_number = f"deleted_{self.phone_number}"
+        self.phone_number = f"deleted_{self.id}__{self.phone_number}"
         self.save(update_fields=['is_deleted', 'deleted_at', 'phone_number', 'is_active'])
