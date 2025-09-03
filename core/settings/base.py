@@ -391,8 +391,9 @@ LANGUAGES = (
     ("en", "English"),
     ("ru", "Russian"),
     ("uz", "Uzbek"),
+    ("zh-cn", "Chinese"),
 )
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
 
 # todo: use production settings
 CORS_ORIGIN_ALLOW_ALL = True
