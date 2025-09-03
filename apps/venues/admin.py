@@ -1,10 +1,12 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
+from modeltranslation.admin import TabbedTranslationAdmin
 
 from apps.venues.models import (
     Company, VenueCategory, Venue, VenueZone, VenueWorkingHour,
     VenueImage, VenueSocialMedia, VenueReview
 )
+from apps.venues.translation import *  # noqa
 
 
 class VenueWorkingHourInline(admin.TabularInline):
@@ -49,7 +51,7 @@ class VenueZoneInline(admin.TabularInline):
 
 
 @admin.register(Company)
-class CompanyAdmin(admin.ModelAdmin):
+class CompanyAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('name', 'external_id', 'parsing_id', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('name', 'external_id', 'parsing_id')
@@ -65,7 +67,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 @admin.register(VenueCategory)
-class VenueCategoryAdmin(admin.ModelAdmin):
+class VenueCategoryAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('title', 'category_type', 'order', 'recommended', 'is_active', 'created_at')
     list_editable = ('order', 'recommended', 'is_active')
     list_filter = ('category_type', 'is_active', 'recommended', 'created_at')
@@ -82,7 +84,7 @@ class VenueCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Venue)
-class VenueAdmin(admin.ModelAdmin):
+class VenueAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('name', 'company', 'rating', 'is_active', 'created_at')
     list_filter = ('is_active', 'company', 'categories', 'rating', 'created_at')
     search_fields = ('name', 'description', 'external_id', 'parsing_id')
@@ -181,7 +183,7 @@ class VenueSocialMediaAdmin(admin.ModelAdmin):
 
 
 @admin.register(VenueZone)
-class VenueZoneAdmin(admin.ModelAdmin):
+class VenueZoneAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('name', 'external_id', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('name', 'external_id')

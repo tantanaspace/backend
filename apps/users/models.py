@@ -16,7 +16,7 @@ class User(AbstractUser, AbstractSoftDeleteModel):
         ENGLISH = "en", _("English")
         RUSSIAN = "ru", _("Russian")
         UZBEK = "uz", _("Uzbek")
-
+        CHINESE = "zh-cn", _("Chinese")
     class Role(models.TextChoices):
         USER = "user", _("User")
         HOST = "host", _("Host")
@@ -39,7 +39,7 @@ class User(AbstractUser, AbstractSoftDeleteModel):
     date_of_birth = models.DateField(_("Date of Birth"))
     role = models.CharField(_("Role"), max_length=20, choices=Role.choices, default=Role.USER)
     gender = models.CharField(_("Gender"), max_length=20, choices=Gender.choices, null=True, blank=True)
-    language = models.CharField(_("Language"), max_length=3, choices=Language.choices, default=Language.UZBEK)
+    language = models.CharField(_("Language"), max_length=6, choices=Language.choices, default=Language.UZBEK)
     avatar = models.ImageField(_('Avatar'), upload_to='users/avatar', null=True, blank=True)
     is_notification_enabled = models.BooleanField(default=True, verbose_name=_("Notification Enabled"))
     telegram_id = models.CharField(_('Telegram ID'), max_length=255, unique=True, null=True, blank=True)

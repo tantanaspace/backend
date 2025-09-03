@@ -115,7 +115,7 @@ class UserSearchHistoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Facility)
-class FacilityAdmin(admin.ModelAdmin):
+class FacilityAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('title', 'quick_access')
     search_fields = ('title',)
     ordering = ('title',)
@@ -128,7 +128,7 @@ class FacilityAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('title',)
     search_fields = ('title',)
     ordering = ('title',)
@@ -149,7 +149,7 @@ class StoryItemInline(admin.TabularInline):
 
 
 @admin.register(StoryGroup)
-class StoryGroupAdmin(admin.ModelAdmin):
+class StoryGroupAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('title', 'background_image_preview', 'story_items_count', 'is_active', 'is_expired', 'order', 'created_at')
     list_filter = ('is_active', 'created_at', 'expires_at')
     search_fields = ('title',)
@@ -182,7 +182,7 @@ class StoryGroupAdmin(admin.ModelAdmin):
 
 
 @admin.register(StoryItem)
-class StoryItemAdmin(admin.ModelAdmin):
+class StoryItemAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('story_group', 'venue', 'media_preview', 'order', 'is_active', 'created_at')
     list_filter = ('is_active', 'venue', 'story_group', 'created_at')
     search_fields = ('story_group__title', 'venue__name', 'description')
