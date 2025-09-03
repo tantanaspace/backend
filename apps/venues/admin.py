@@ -40,6 +40,13 @@ class VenueReviewInline(admin.TabularInline):
     max_num = 5
     autocomplete_fields = ('venue', 'user')
 
+class VenueZoneInline(admin.TabularInline):
+    model = VenueZone
+    extra = 0
+    fields = ('name', 'photo_view', 'external_id')
+    autocomplete_fields = ('venue',)
+    ordering = ('name',)
+
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
@@ -92,6 +99,7 @@ class VenueAdmin(admin.ModelAdmin):
         VenueImageInline,
         VenueSocialMediaInline,
         VenueReviewInline,
+        VenueZoneInline,
     ]
     
     fieldsets = (
@@ -183,7 +191,7 @@ class VenueZoneAdmin(admin.ModelAdmin):
     list_max_show_all = 1000
     
     fieldsets = (
-        (None, {'fields': ('name', 'photo_view', 'external_id')}),
+        (None, {'fields': ('name', 'photo_view', 'venue', 'external_id')}),
         (_('Timestamps'), {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
 
