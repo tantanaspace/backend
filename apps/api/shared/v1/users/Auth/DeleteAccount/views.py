@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 class DeleteAccountAPIView(GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         user = request.user
         user.delete()
         return Response({"success": True}, status=status.HTTP_200_OK)
