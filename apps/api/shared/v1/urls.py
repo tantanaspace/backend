@@ -28,6 +28,7 @@ from apps.api.shared.v1.users.Auth import (
     ResetPasswordAPIView,
     UserInfoAPIView,
     UserInfoUpdateAPIView,
+    DeleteAccountAPIView,
 )
 
 from apps.api.shared.v1.notifications import (
@@ -51,6 +52,8 @@ urlpatterns = [
     
     path('auth/user-info/', UserInfoAPIView.as_view(), name='user_info'),
     path('auth/user-info-update/', UserInfoUpdateAPIView.as_view(), name='user_info_update'),
+    
+    path('auth/delete-account/', DeleteAccountAPIView.as_view(), name='delete_account'),
     
     path("auth/token-refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     
