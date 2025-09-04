@@ -22,7 +22,7 @@ class VenueDetailCompanySerializer(serializers.ModelSerializer):
 
 
 class VenueDetailImageSerializer(serializers.ModelSerializer):
-    # image_small = serializers.SerializerMethodField()
+    image_small = serializers.SerializerMethodField()
     
     class Meta:
         model = VenueImage
@@ -30,11 +30,11 @@ class VenueDetailImageSerializer(serializers.ModelSerializer):
             'image_small',
         )
 
-    # def get_image_small(self, obj):
-    #     request = self.context.get('request')
-    #     if obj.image:
-    #         return request.build_absolute_uri(obj.image.thumbnail['200x200'].url)
-    #     return None
+    def get_image_small(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            return request.build_absolute_uri(obj.image.url)
+        return None
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
