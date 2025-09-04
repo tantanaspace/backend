@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
 
-from apps.api.shared.v1.users.Auth.Registration.serializers import RegistrationSerializer
+from apps.api.shared.v1.users.Auth.Registration.serializers import RegistrationSerializer, RegistrationUserInfoSerializer
 from utils.generators import generate_cache_key, CacheType
 
 
@@ -40,7 +40,8 @@ class RegistrationAPIView(GenericAPIView):
         user.set_password(password)
         user.save()
 
-        return Response({"success": True}, status=status.HTTP_201_CREATED)
+        resoonse_data = {**user.tokens, 'user': RegistrationUserInfoSerializer(instance=user).data}
+        return Response(resoonse_data, status=status.HTTP_201_CREATED)
 
 __all__ = [
     'RegistrationAPIView'
