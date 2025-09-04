@@ -28,7 +28,7 @@ class VenueImageInline(admin.TabularInline):
 class VenueSocialMediaInline(admin.TabularInline):
     model = VenueSocialMedia
     extra = 0
-    fields = ('social_type', 'link', 'is_active')
+    fields = ('title', 'social_type', 'link', 'is_active')
     ordering = ('social_type',)
     autocomplete_fields = ('venue',)
 
@@ -105,7 +105,7 @@ class VenueAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     ]
     
     fieldsets = (
-        (_('Basic'), {'fields': ('name', 'company', 'description', 'external_id', 'parsing_id')}),
+        (_('Basic'), {'fields': ('name', 'company', 'description', 'phone_number', 'external_id', 'parsing_id')}),
         (_('Location'), {'fields': ('location', 'longitude', 'latitude')}),
         (_('Media & Categories'), {'fields': ('background_image', 'categories', 'facilities', 'tags')}),
         (_('Rating'), {'fields': ('rating',)}),
@@ -163,7 +163,7 @@ class VenueImageAdmin(admin.ModelAdmin):
 
 @admin.register(VenueSocialMedia)
 class VenueSocialMediaAdmin(admin.ModelAdmin):
-    list_display = ('venue', 'social_type', 'link', 'is_active')
+    list_display = ('title', 'venue', 'social_type', 'link', 'is_active')
     list_filter = ('social_type', 'is_active', 'venue')
     search_fields = ('venue__name', 'link')
     ordering = ('venue__name', 'social_type')
@@ -174,7 +174,7 @@ class VenueSocialMediaAdmin(admin.ModelAdmin):
     list_select_related = ('venue',)
     
     fieldsets = (
-        (None, {'fields': ('venue', 'social_type', 'link', 'is_active')}),
+        (None, {'fields': ('title', 'venue', 'social_type', 'link', 'is_active')}),
         (_('Timestamps'), {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
     
