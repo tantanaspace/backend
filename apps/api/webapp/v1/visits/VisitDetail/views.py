@@ -7,7 +7,7 @@ from apps.users.permissions import IsHostUser
 class VisitDetailAPIView(RetrieveAPIView):
     serializer_class = VisitDetailSerializer
     permission_classes = [IsHostUser]
-    lookup_field = 'visit_id'
+    lookup_url_kwarg = 'visit_id'
 
     def get_queryset(self):
         return Visit.objects.filter(venue=self.request.user.venue)
