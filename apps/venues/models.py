@@ -153,6 +153,8 @@ class VenueSocialMedia(AbstractTimeStampedModel):
         TELEGRAM = 'telegram', _('Telegram')
         TWITTER = 'twitter', _('Twitter')
         TIKTOK = 'tiktok', _('TikTok')
+        WHATSAPP = 'whatsapp', _('WhatsApp')
+        WEBSITE = 'website', _('Website')
         OTHER = 'other', _('Other')
 
     title = models.CharField(_('Title'), max_length=255)
