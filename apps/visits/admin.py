@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 
 from apps.visits.models import Visit, VisitGuest
+from apps.orders.models import Order, OrderItem
 
 
 class VisitGuestInline(admin.TabularInline):
@@ -15,11 +16,33 @@ class VisitGuestInline(admin.TabularInline):
     ordering = ('-is_joined', 'user__full_name')
 
 
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 0
+    fields = ('product_name', 'quantity', 'unit_price', 'total_price', 'status')
+    readonly_fields = ('total_price',)
+    autocomplete_fields = ()
+    ordering = ('-created_at',)
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('order')
+
+
+class OrderInline(admin.StackedInline):
+    model = Order
+    extra = 0
+    fields = ('waiter_full_name', 'percentage_of_service', 'service_fee', 'total_amount')
+    readonly_fields = ('total_amount',)
+    autocomplete_fields = ()
+    
+    inlines = [OrderItemInline]
+
+
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'user_info', 'venue', 'zone', 'booked_date', 'booked_time', 
-        'number_of_guests', 'status', 'created_by', 'guests_count'
+        'number_of_guests', 'status', 'created_by', 'guests_count', 'order_info'
     )
     list_display_links = ('id', 'user_info')
     list_filter = (
@@ -38,7 +61,7 @@ class VisitAdmin(admin.ModelAdmin):
     list_max_show_all = 1000
     list_select_related = ('user', 'venue', 'zone', 'host')
     
-    inlines = [VisitGuestInline]
+    inlines = [VisitGuestInline, OrderInline]
     
     fieldsets = (
         (_('Visit Information'), {
@@ -97,9 +120,20 @@ class VisitAdmin(admin.ModelAdmin):
         return "-"
     visit_duration.short_description = _('Duration')
     
+    def order_info(self, obj):
+        if hasattr(obj, 'order'):
+            url = reverse('admin:orders_order_change', args=[obj.order.id])
+            return format_html(
+                '<a href="{}">Order #{} - ${}</a>',
+                url, obj.order.id, obj.order.total_amount
+            )
+        return "-"
+    order_info.short_description = _('Order')
+    order_info.admin_order_field = 'order__id'
+    
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(
-            'guests', 'guests__user'
+            'guests', 'guests__user', 'order', 'order__items'
         )
 
 
