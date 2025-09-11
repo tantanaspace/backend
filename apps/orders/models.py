@@ -18,7 +18,7 @@ class Order(AbstractTimeStampedModel):
         ordering = ['-id']
 
     def __str__(self):
-        return f'Order #{self.id} - {self.get_status_display()} ({self.visit})'
+        return f'Order #{self.id} - {self.waiter_full_name} | {self.visit_id}'
 
 
 class OrderItem(AbstractTimeStampedModel):
