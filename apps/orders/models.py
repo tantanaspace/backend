@@ -43,3 +43,8 @@ class OrderItem(AbstractTimeStampedModel):
 
     def __str__(self):
         return f'{self.product_name} x {self.quantity} (Order #{self.order_id})'
+
+    def save(self, *args, **kwargs):
+        if not self.total_price:
+            self.total_price = self.unit_price * self.quantity
+        super().save(*args, **kwargs)
