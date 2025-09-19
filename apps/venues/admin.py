@@ -86,7 +86,7 @@ class VenueCategoryAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
 @admin.register(Venue)
 class VenueAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     list_display = ('name', 'company', 'rating', 'is_active', 'created_at')
-    list_filter = ('is_active', 'company', 'categories', 'rating', 'created_at')
+    list_filter = ('is_active', 'company', 'categories', 'rating', 'created_at', 'is_active')
     search_fields = ('name', 'description', 'external_id', 'parsing_id')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
@@ -105,7 +105,7 @@ class VenueAdmin(TabbedTranslationAdmin, admin.ModelAdmin):
     ]
     
     fieldsets = (
-        (_('Basic'), {'fields': ('name', 'company', 'description', 'phone_number', 'external_id', 'parsing_id')}),
+        (_('Basic'), {'fields': ('name', 'company', 'description', 'phone_number', 'external_id', 'parsing_id', 'iiko_api_token', 'is_active')}),
         (_('Location'), {'fields': ('location', 'longitude', 'latitude')}),
         (_('Media & Categories'), {'fields': ('background_image', 'categories', 'facilities', 'tags')}),
         (_('Rating'), {'fields': ('rating',)}),
