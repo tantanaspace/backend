@@ -76,6 +76,8 @@ class Venue(AbstractTimeStampedModel):
     external_id = models.CharField(_('External ID'), max_length=255, blank=True, null=True)
     parsing_id = models.CharField(_('Parsing ID'), max_length=500, blank=True, null=True, help_text=_('ID from parsing system'))
 
+    iiko_api_token = models.CharField(_('IIKO API Token'), max_length=255, blank=True, null=True)
+
     class Meta:
         verbose_name = _('Venue')
         verbose_name_plural = _('Venues')
