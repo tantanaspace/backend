@@ -86,7 +86,7 @@ CUSTOM_APPS = [
     "apps.visits",
     "apps.orders",
     "apps.notifications",
-    # "apps.payments",
+    "apps.payments",
 ]
 
 THIRD_PARTY_APPS = [
@@ -99,6 +99,7 @@ THIRD_PARTY_APPS = [
     'nplusone.ext.django',
     'django_celery_beat',
     'versatileimagefield',
+    "auditlog",
     # 'leaflet',
 ]
 
@@ -113,6 +114,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "apps.payments.middlewares.PaymentTransactionLoggingMiddleware",
     'nplusone.ext.django.NPlusOneMiddleware',
 ]
 
