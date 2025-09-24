@@ -27,6 +27,7 @@ jsonschema
 pycountry==24.6.1
 sentry-sdk
 python-telegram-bot==13.15
+django-auditlog==3.2.1
 
 django-versatileimagefield  
 django-leaflet==0.32.0

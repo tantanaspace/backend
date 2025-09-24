@@ -86,7 +86,7 @@ CUSTOM_APPS = [
     "apps.visits",
     "apps.orders",
     "apps.notifications",
-    # "apps.payments",
+    "apps.payments",
 ]
 
 THIRD_PARTY_APPS = [
@@ -99,6 +99,7 @@ THIRD_PARTY_APPS = [
     'nplusone.ext.django',
     'django_celery_beat',
     'versatileimagefield',
+    "auditlog",
     # 'leaflet',
 ]
 
@@ -113,6 +114,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "apps.payments.middlewares.PaymentTransactionLoggingMiddleware",
     'nplusone.ext.django.NPlusOneMiddleware',
 ]
 
@@ -457,4 +459,21 @@ ESKIZ_CREDENTIALS = {
 TELEGRAM_BOT = {
     'token': env.str('TELEGRAM_BOT_TOKEN', default='7826447342:AAGX2SSnJwrrVpkTpq_pQcaClVmxq2SLqw0'),
     'webapp_url': env.str('TELEGRAM_WEBAPP_URL', default='https://t.me/your_bot_username/app'),
+}
+
+
+PAYMENT_CREDENTIALS = {
+    'payme': {
+        'merchant_id': env.str('PAYME_MERCHANT_ID', default=''),
+        'callback_url': env.str('PAYME_CALLBACK_URL', default=''),
+    },
+    'paylov': {
+        'merchant_id': env.str('PAYLOV_MERCHANT_ID', default=''),
+        'callback_url': env.str('PAYLOV_CALLBACK_URL', default=''),
+    },
+    'click': {
+        'merchant_id': env.str('CLICK_MERCHANT_ID', default=''),
+        'merchant_service_id': env.str('CLICK_MERCHANT_SERVICE_ID', default=''),
+        'callback_url': env.str('CLICK_CALLBACK_URL', default=''),
+    },
 }

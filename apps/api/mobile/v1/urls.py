@@ -19,6 +19,10 @@ from apps.api.mobile.v1.venues import (
         RecommendedVenuesAPIView,
         MapVenueListAPIView,
     )
+from apps.api.mobile.v1.payments import (
+    TransactionCreateAPIView,
+    TransactionDetailAPIView
+)
 
 app_name = 'mobile_v1'
 
@@ -42,4 +46,8 @@ urlpatterns = [
 
     path('stories/', StoryListAPIView.as_view(), name='story-list'),
     path('story/<int:story_group_id>/', StoryDetailAPIView.as_view(), name='story-detail'),
+
+    # payments
+    path("transaction-create/", TransactionCreateAPIView.as_view(), name="transaction-create"),
+    path("transaction-detail/<int:pk>/", TransactionDetailAPIView.as_view(), name="transaction-detail"),
 ]
