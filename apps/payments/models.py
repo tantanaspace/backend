@@ -104,40 +104,38 @@ class PaymentTransaction(AbstractTimeStampedModel):
     def payment_url(self):
         payment_url = ""
         if self.provider == PaymentTransaction.ProviderType.PAYME:
-            merchant_id = settings.PAYMENT_CREDENTIALS['payme']['merchant_id']
+            merchant_id = settings.PAYMENT_CREDENTIALS.get('payme', {}).get('merchant_id')
             params = f"m={merchant_id};ac.order_id={self.id};a={self.amount * 100};"
             encode_params = base64.b64encode(params.encode("utf-8"))
             encode_params = str(encode_params, "utf-8")
-            payment_url = f"{settings.PAYMENT_CREDENTIALS['payme']['callback_url']}/{encode_params}"
+            payment_url = f"{settings.PAYMENT_CREDENTIALS.get('payme', {}).get('callback_url')}/{encode_params}"
 
         elif self.provider == PaymentTransaction.ProviderType.PAYLOV:
-            merchant_id = settings.PAYMENT_CREDENTIALS['paylov']['merchant_id']
+            merchant_id = settings.PAYMENT_CREDENTIALS.get('paylov', {}).get('merchant_id')
             query = f"merchant_id={merchant_id}&amount={self.amount}&account.order_id={self.id}"
             encode_params = base64.b64encode(query.encode("utf-8"))
             encode_params = str(encode_params, "utf-8")
-            payment_url = f"{settings.PAYMENT_CREDENTIALS['paylov']['callback_url']}/{encode_params}"
+            payment_url = f"{settings.PAYMENT_CREDENTIALS.get('paylov', {}).get('callback_url')}/{encode_params}"
 
         elif self.provider == PaymentTransaction.ProviderType.CLICK:
-            merchant_id = settings.PAYMENT_CREDENTIALS['click']["merchant_id"]
-            service_id = settings.PAYMENT_CREDENTIALS['click']["merchant_service_id"]
+            merchant_id = settings.PAYMENT_CREDENTIALS.get('click', {}).get('merchant_id')
+            service_id = settings.PAYMENT_CREDENTIALS.get('click', {}).get('merchant_service_id')
             params = (
                 f"?service_id={service_id}&merchant_id={merchant_id}&"
                 f"amount={self.amount}&transaction_param={self.id}"
             )
-            payment_url = f"{settings.PAYMENT_CREDENTIALS['click']['callback_url']}/{params}"
+            payment_url = f"{settings.PAYMENT_CREDENTIALS.get('click', {}).get('callback_url')}/{params}"
 
         return payment_url
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
     ):
-        if self.provider == PaymentTransaction.ProviderType.MANUAL and not self.paid_at:
+        if self.provider == PaymentTransaction.ProviderType.MANUAL and not self.pk:
             self.status = self.StatusType.ACCEPTED
             self.paid_at = timezone.now()
-            if not self.pk:
-                super().save(force_insert, using, update_fields=None)
-
-            self.user.update_balance()
+            super().save(force_insert, using, update_fields=None)
+            # todo: add user update balance logic
         else:
             super().save(force_insert, force_update, using, update_fields)
 

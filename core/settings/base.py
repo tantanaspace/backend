@@ -460,3 +460,20 @@ TELEGRAM_BOT = {
     'token': env.str('TELEGRAM_BOT_TOKEN', default='7826447342:AAGX2SSnJwrrVpkTpq_pQcaClVmxq2SLqw0'),
     'webapp_url': env.str('TELEGRAM_WEBAPP_URL', default='https://t.me/your_bot_username/app'),
 }
+
+
+PAYMENT_CREDENTIALS = {
+    'payme': {
+        'merchant_id': env.str('PAYME_MERCHANT_ID', default=''),
+        'callback_url': env.str('PAYME_CALLBACK_URL', default=''),
+    },
+    'paylov': {
+        'merchant_id': env.str('PAYLOV_MERCHANT_ID', default=''),
+        'callback_url': env.str('PAYLOV_CALLBACK_URL', default=''),
+    },
+    'click': {
+        'merchant_id': env.str('CLICK_MERCHANT_ID', default=''),
+        'merchant_service_id': env.str('CLICK_MERCHANT_SERVICE_ID', default=''),
+        'callback_url': env.str('CLICK_CALLBACK_URL', default=''),
+    },
+}
