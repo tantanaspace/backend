@@ -4,19 +4,20 @@ from enum import Enum
 
 
 class CodeType(str, Enum):
-    NUMERIC = 'numeric'
-    ALPHABETIC = 'alphabetic'
-    ALPHANUMERIC = 'alphanumeric'
-    NON_STANDARD = 'non_standard'
+    NUMERIC = "numeric"
+    ALPHABETIC = "alphabetic"
+    ALPHANUMERIC = "alphanumeric"
+    NON_STANDARD = "non_standard"
 
 
 class CacheType(str, Enum):
-    REGISTRATION_SEND_OTP = 'registration-send-otp'
-    CONFIRMED_REGISTRATION_SEND_OTP = 'confirmed-registration-send-otp'
-    FORGOT_PASSWORD_SEND_OTP = 'forgot-password-send-otp'
-    CONFIRMED_FORGOT_PASSWORD_SEND_OTP = 'confirmed-forgot-password-send-otp'
-    CHANGE_PHONE_NUMBER_SEND_OTP = 'change-phone-number-send-otp'
-    CONFIRMED_CHANGE_PHONE_NUMBER_SEND_OTP = 'confirmed-change-phone-number-send-otp'
+    REGISTRATION_SEND_OTP = "registration-send-otp"
+    CONFIRMED_REGISTRATION_SEND_OTP = "confirmed-registration-send-otp"
+    FORGOT_PASSWORD_SEND_OTP = "forgot-password-send-otp"
+    CONFIRMED_FORGOT_PASSWORD_SEND_OTP = "confirmed-forgot-password-send-otp"
+    CHANGE_PHONE_NUMBER_SEND_OTP = "change-phone-number-send-otp"
+    CONFIRMED_CHANGE_PHONE_NUMBER_SEND_OTP = "confirmed-change-phone-number-send-otp"
+
 
 def generate_code(length: int, code_type: CodeType) -> str:
     if length <= 0:
@@ -31,11 +32,11 @@ def generate_code(length: int, code_type: CodeType) -> str:
     elif code_type == CodeType.NON_STANDARD:
         unsafe = ": \t\n\r"
         raw = string.punctuation + string.whitespace
-        chars = raw.translate(str.maketrans('', '', unsafe))
+        chars = raw.translate(str.maketrans("", "", unsafe))
     else:
         raise ValueError(f"Unsupported code type: {code_type}")
 
-    return ''.join(random.choices(chars, k=length))
+    return "".join(random.choices(chars, k=length))
 
 
 def generate_cache_key(cache_type: CacheType, *parts) -> str:
@@ -44,8 +45,8 @@ def generate_cache_key(cache_type: CacheType, *parts) -> str:
 
 
 __all__ = [
-    'generate_code',
-    'generate_cache_key',
-    'CacheType',
-    'CodeType',
+    "generate_code",
+    "generate_cache_key",
+    "CacheType",
+    "CodeType",
 ]

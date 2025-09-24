@@ -1,8 +1,8 @@
-import time
 import json
-from enum import Enum
+import time
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
+from enum import Enum
+from typing import Any, Dict, Optional
 
 from django_redis import get_redis_connection
 
@@ -12,6 +12,7 @@ class RedisKeys:
     Redis keys used for WebSocket messaging service.
     Organized by user and worker related keys.
     """
+
     DRIVER_WORKER_MAP = "ws:driver_worker_map"
     ADMIN_WORKER_MAP = "ws:admin_worker_map"
     WORKER_STREAM_CHANNEL = "ws:stream:{worker_id}"
@@ -21,6 +22,7 @@ class MessageTypes(Enum):
     """
     Enum defining WebSocket message types.
     """
+
     HOS_REMAINING = "hos_remaining"
     HOS_TIMER = "hos_timer"
     HOS_VIOLATION = "hos_violation"
@@ -48,12 +50,11 @@ class BaseWebSocketInterface(ABC):
             redis_client: Optional custom Redis connection instance.
         """
         self.redis = redis_client or get_redis_connection("default")
-        
+
     @property
     @abstractmethod
     def user_worker_map_key(self) -> str:
         """Return Redis hash key used to store user_id → worker_id mapping."""
-        pass
 
     def _get_user_stream(self, user_id: int) -> Optional[str]:
         """
@@ -74,7 +75,9 @@ class BaseWebSocketInterface(ABC):
 
         return RedisKeys.WORKER_STREAM_CHANNEL.format(worker_id=worker_id.decode())
 
-    def _send_message(self, user_id: int, message_type: MessageTypes, data: Dict[str, Any]) -> bool:
+    def _send_message(
+        self, user_id: int, message_type: MessageTypes, data: Dict[str, Any]
+    ) -> bool:
         """
         Generic method to send a message of a given type to a user.
 
@@ -94,13 +97,13 @@ class BaseWebSocketInterface(ABC):
             "user_id": user_id,
             "type": message_type.value,
             "timestamp": time.time(),
-            "data": json.dumps(data)
+            "data": json.dumps(data),
         }
 
         # Redis xadd expects field-value pairs; convert all values to strings
         self.redis.xadd(stream_key, message)
         return True
-    
+
     def send_hos_remaining(self, user_id: int, remaining_data: Dict[str, Any]) -> bool:
         """
         Send Hours of Service (HOS) remaining data to a user.
@@ -139,8 +142,10 @@ class BaseWebSocketInterface(ABC):
             True if message sent, False if user offline.
         """
         return self._send_message(user_id, MessageTypes.HOS_VIOLATION, violation_data)
-    
-    def send_hos_violation_signal(self, user_id: int, violation_signal_data: Dict[str, Any]) -> bool:
+
+    def send_hos_violation_signal(
+        self, user_id: int, violation_signal_data: Dict[str, Any]
+    ) -> bool:
         """
         Send HOS violation signal alert to a user.
 
@@ -151,7 +156,9 @@ class BaseWebSocketInterface(ABC):
         Returns:
             True if message sent, False if user offline.
         """
-        return self._send_message(user_id, MessageTypes.HOS_VIOLATION_SIGNAL, violation_signal_data)
+        return self._send_message(
+            user_id, MessageTypes.HOS_VIOLATION_SIGNAL, violation_signal_data
+        )
 
     def send_signal(self, user_id: int, signal_data: Dict[str, Any]) -> bool:
         """
@@ -215,7 +222,7 @@ class DriverWebSocketInterface(BaseWebSocketInterface):
     @property
     def user_worker_map_key(self) -> str:
         return RedisKeys.DRIVER_WORKER_MAP
-    
+
 
 class AdminWebSocketInterface(BaseWebSocketInterface):
     @property

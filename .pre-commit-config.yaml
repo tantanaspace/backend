@@ -1,7 +1,7 @@
 exclude: '(\.git|\.mypy_cache|\.pytest_cache|\.tox|\.venv|venv|.env|env|\.vscode|static|media/|.*/templates|.*/migrations)'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: check-added-large-files
       - id: check-ast
@@ -15,9 +15,9 @@ repos:
       - id: debug-statements
       - id: end-of-file-fixer
       - id: name-tests-test
-      - id: check-byte-order-marker
+      - id: fix-byte-order-marker
   - repo: https://github.com/ambv/black
-    rev: 22.6.0
+    rev: 25.9.0
     hooks:
       - id: black
         name: black
@@ -30,13 +30,12 @@ repos:
   #  because operators are misaligned. Disable W503 and enable the disabled-by-default counterpart W504.
   #  E203 should be disabled while changes are still discussed.
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.971
+    rev: v1.18.2
     hooks:
       - id: mypy
-        name: Run type checks
-        args: [ "--ignore-missing-imports", "--install-types", "--non-interactive" ]
+        args: [--config-file=mypy.ini]
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 6.0.1
     hooks:
       - id: isort
         name: isort (python)

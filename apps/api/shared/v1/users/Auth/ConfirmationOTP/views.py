@@ -1,14 +1,13 @@
 from django.core.cache import cache
-
+from rest_framework import serializers, status
 from rest_framework.generics import GenericAPIView
-from rest_framework import serializers
 from rest_framework.response import Response
-from rest_framework import status
 
-
-from apps.api.shared.v1.users.Auth.ConfirmationOTP.serializers import ConfirmationOTPSerializer, UserAction
-from utils.generators import generate_cache_key, CacheType, generate_code, CodeType
-
+from apps.api.shared.v1.users.Auth.ConfirmationOTP.serializers import (
+    ConfirmationOTPSerializer,
+    UserAction,
+)
+from utils.generators import CacheType, CodeType, generate_cache_key, generate_code
 
 
 class ConfirmationOTPAPIView(GenericAPIView):
@@ -34,7 +33,9 @@ class ConfirmationOTPAPIView(GenericAPIView):
         otp_code = serializer.validated_data["otp_code"]
         action = serializer.validated_data["action"]
 
-        cache_key = generate_cache_key(self.cache_type_map[action], str(phone_number), session)
+        cache_key = generate_cache_key(
+            self.cache_type_map[action], str(phone_number), session
+        )
         cached_otp = cache.get(cache_key)
 
         if not cached_otp or cached_otp != otp_code:
@@ -44,9 +45,10 @@ class ConfirmationOTPAPIView(GenericAPIView):
 
         session_confirmed = generate_code(length=32, code_type=CodeType.ALPHANUMERIC)
 
-        cache_key_confirmed = generate_cache_key(self.cache_type_map_confirmed[action], str(phone_number), session_confirmed)
+        cache_key_confirmed = generate_cache_key(
+            self.cache_type_map_confirmed[action], str(phone_number), session_confirmed
+        )
         cache.set(cache_key_confirmed, True, timeout=self.SESSION_EXPIRATION_TIME * 60)
-
 
         response_data = {
             "phone_number": str(phone_number),
@@ -56,6 +58,5 @@ class ConfirmationOTPAPIView(GenericAPIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
 
-__all__ = [
-    'ConfirmationOTPAPIView'
-]
+
+__all__ = ["ConfirmationOTPAPIView"]

@@ -1,14 +1,15 @@
 from enum import Enum
 
-from rest_framework import serializers
 from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework import serializers
 
 
 class UserAction(str, Enum):
     """User action type based on phone number status"""
-    REGISTRATION = 'registration'
-    FORGOT_PASSWORD = 'forgot-password'
-    CHANGE_PHONE_NUMBER = 'change-phone-number'
+
+    REGISTRATION = "registration"
+    FORGOT_PASSWORD = "forgot-password"
+    CHANGE_PHONE_NUMBER = "change-phone-number"
 
 
 class ConfirmationOTPSerializer(serializers.Serializer):

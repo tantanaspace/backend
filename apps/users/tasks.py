@@ -1,10 +1,17 @@
-from core.celery import app
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
+from core.celery import app
+
 
 @app.task
-def send_html_email(subject: str, to_email: str, template_name: str, context: dict, from_email: str = None):
+def send_html_email(
+    subject: str,
+    to_email: str,
+    template_name: str,
+    context: dict,
+    from_email: str = None,
+):
     """
     Universal sending of HTML-letter via Celery.
     :param subject: Subject of the letter

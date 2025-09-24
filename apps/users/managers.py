@@ -6,7 +6,7 @@ class UserManager(BaseUserManager):
     def _create_user_object(self, phone_number, password, **extra_fields):
         if not phone_number:
             raise ValueError("The given phone_number must be set")
-        
+
         # Lookup the real model class from the global app registry so this
         # manager method can be used in migrations. This is fine because
         # managers are by definition working on the real model.

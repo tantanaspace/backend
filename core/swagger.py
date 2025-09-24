@@ -1,35 +1,31 @@
-from django.urls import re_path, path, include
-
+from django.urls import include, path, re_path
 from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
 from drf_yasg.generators import OpenAPISchemaGenerator
 from drf_yasg.inspectors import SwaggerAutoSchema
+from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+
 
 class AppNameTagAutoSchema(SwaggerAutoSchema):
     def get_tags(self, operation_keys=None):
-        
-
-                        
-        view_tags = getattr(self.view, 'swagger_tags', None)
+        view_tags = getattr(self.view, "swagger_tags", None)
         if view_tags:
             return view_tags
 
         module_path = self.view.__module__
-        
+
         # example path: apps.api.mobile.v1.logs.views
         try:
-            parts = module_path.split('.')
-            api_index = parts.index('api')
-            
+            parts = module_path.split(".")
+            api_index = parts.index("api")
+
             # app_name always after: apps.api.<interface>.v1.<app>
             # 0=apps, 1=api, 2=interface, 3=v1, 4=app_name
-            app_name = parts[api_index + 3]  
+            app_name = parts[api_index + 3]
         except (ValueError, IndexError):
             app_name = "other"
 
         return [app_name]
-
 
 
 class BothHttpAndHttpsSchemaGenerator(OpenAPISchemaGenerator):
@@ -41,7 +37,7 @@ class BothHttpAndHttpsSchemaGenerator(OpenAPISchemaGenerator):
             schema.schemes = ["http", "https"]
 
         return schema
-    
+
 
 swagger_title = "Tantana"
 swagger_description = "Tantana swagger"
@@ -61,10 +57,14 @@ mobile_schema_view_v1 = get_schema_view(
     ),
     public=True,
     generator_class=BothHttpAndHttpsSchemaGenerator,
-    permission_classes=[permissions.AllowAny, ],  # todo: change to permissions.IsAuthenticated
+    permission_classes=[
+        permissions.AllowAny,
+    ],  # todo: change to permissions.IsAuthenticated
     patterns=[
-        path("api/mobile/v1/", include("apps.api.mobile.v1.urls", namespace='mobile_v1'))
-    ]
+        path(
+            "api/mobile/v1/", include("apps.api.mobile.v1.urls", namespace="mobile_v1")
+        )
+    ],
 )
 
 mobile_swagger_urlpatterns_v1 = [
@@ -86,7 +86,6 @@ mobile_swagger_urlpatterns_v1 = [
 ]
 
 
-
 shared_schema_view_v1 = get_schema_view(
     openapi.Info(
         title=swagger_title,
@@ -98,10 +97,12 @@ shared_schema_view_v1 = get_schema_view(
     ),
     public=True,
     generator_class=BothHttpAndHttpsSchemaGenerator,
-    permission_classes=[permissions.AllowAny, ],  # todo: change to permissions.IsAuthenticated
+    permission_classes=[
+        permissions.AllowAny,
+    ],  # todo: change to permissions.IsAuthenticated
     patterns=[
-        path("api/v1/", include("apps.api.shared.v1.urls", namespace='shared_v1'))
-    ]
+        path("api/v1/", include("apps.api.shared.v1.urls", namespace="shared_v1"))
+    ],
 )
 
 shared_swagger_urlpatterns_v1 = [
@@ -123,7 +124,6 @@ shared_swagger_urlpatterns_v1 = [
 ]
 
 
-
 webapp_schema_view_v1 = get_schema_view(
     openapi.Info(
         title=swagger_title,
@@ -135,10 +135,14 @@ webapp_schema_view_v1 = get_schema_view(
     ),
     public=True,
     generator_class=BothHttpAndHttpsSchemaGenerator,
-    permission_classes=[permissions.AllowAny, ],  # todo: change to permissions.IsAuthenticated
+    permission_classes=[
+        permissions.AllowAny,
+    ],  # todo: change to permissions.IsAuthenticated
     patterns=[
-        path("api/webapp/v1/", include("apps.api.webapp.v1.urls", namespace='webapp_v1'))
-    ]
+        path(
+            "api/webapp/v1/", include("apps.api.webapp.v1.urls", namespace="webapp_v1")
+        )
+    ],
 )
 
 
@@ -161,9 +165,8 @@ webapp_swagger_urlpatterns_v1 = [
 ]
 
 
-
 swagger_urlpatterns = (
-    mobile_swagger_urlpatterns_v1 
+    mobile_swagger_urlpatterns_v1
     + shared_swagger_urlpatterns_v1
     + webapp_swagger_urlpatterns_v1
 )

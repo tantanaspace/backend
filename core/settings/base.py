@@ -9,18 +9,17 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
 import logging
-import environ
-import dj_database_url
-import sentry_sdk
-
-from pathlib import Path
+import os
 from datetime import timedelta
-from django.utils.translation import gettext_lazy as _
-from firebase_admin import initialize_app, credentials
-from sentry_sdk.integrations.django import DjangoIntegration
+from pathlib import Path
 
+import dj_database_url
+import environ
+import sentry_sdk
+from django.utils.translation import gettext_lazy as _
+from firebase_admin import credentials, initialize_app
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from core.jazzmin_conf import *  # noqa
 from utils.triggers import sentry_before_send_trigger
@@ -60,12 +59,10 @@ sentry_sdk.init(
     profile_lifecycle="trace",
     integrations=[DjangoIntegration()],
     before_send=sentry_before_send_trigger,
-
-
 )
-SENTRY_BOT_TOKEN = env.str('SENTRY_BOT_TOKEN')
-SENTRY_CHAT_ID = env.str('SENTRY_CHAT_ID')
-SENTRY_THREAD_ID = env.str('SENTRY_THREAD_ID')
+SENTRY_BOT_TOKEN = env.str("SENTRY_BOT_TOKEN")
+SENTRY_CHAT_ID = env.str("SENTRY_CHAT_ID")
+SENTRY_THREAD_ID = env.str("SENTRY_THREAD_ID")
 
 # Application definition
 DJANGO_APPS = [
@@ -91,14 +88,14 @@ CUSTOM_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    'django_filters',
+    "django_filters",
     "drf_yasg",
     "corsheaders",
     "modeltranslation",
     "fcm_django",
-    'nplusone.ext.django',
-    'django_celery_beat',
-    'versatileimagefield',
+    "nplusone.ext.django",
+    "django_celery_beat",
+    "versatileimagefield",
     "auditlog",
     # 'leaflet',
 ]
@@ -115,14 +112,14 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "apps.payments.middlewares.PaymentTransactionLoggingMiddleware",
-    'nplusone.ext.django.NPlusOneMiddleware',
+    "nplusone.ext.django.NPlusOneMiddleware",
 ]
 
 # Root url conf
 ROOT_URLCONF = "core.urls"
 
 # Auth user model
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = "users.User"
 
 # Wsgi application
 WSGI_APPLICATION = "core.wsgi.application"
@@ -136,7 +133,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 DATABASES = {
-    'default': dj_database_url.config(),
+    "default": dj_database_url.config(),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = False
 DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = False
@@ -212,7 +209,7 @@ CACHES = {
     }
 }
 REDIS_URL = env.str("REDIS_URL", "redis://redis:6379/0")
-REDIS_HOST = env.str("REDIS_HOST", "localhost") 
+REDIS_HOST = env.str("REDIS_HOST", "localhost")
 REDIS_PORT = env.int("REDIS_PORT", 6379)
 REDIS_DB = env.int("REDIS_DB", 0)
 
@@ -222,9 +219,9 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
     ),
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
@@ -250,23 +247,18 @@ SIMPLE_JWT = {
     "JSON_ENCODER": None,
     "JWK_URL": None,
     "LEEWAY": 0,
-
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-
     "JTI_CLAIM": "jti",
-
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
-
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
     "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
@@ -281,15 +273,15 @@ CELERY_RESULT_BACKEND = env.str("CELERY_BROKER_URL", "redis://localhost:6379/1")
 
 CELERY_TASK_RESULT_EXPIRES = 60 * 60 * 24
 
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
 
 CELERY_TIMEZONE = "UTC"
 
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
 
 # CYPHER CONFIGURATION
 AES_KEY = env.str("AES_KEY", "")
@@ -303,26 +295,31 @@ RECAPTCHA_PRIVATE_KEY = env.str(
 )
 
 # MAIL CONF
-EMAIL_BACKEND = env.str('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-EMAIL_HOST = env.str('EMAIL_HOST', 'smtp.zoho.com')
-EMAIL_PORT = env.int('EMAIL_PORT', 465)
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', False)
-EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL', True)
-EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', 'finstransport@movegreen.us')
-EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '5cQxudd7jjjd')
-DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL', 'finstransport@movegreen.us')
+EMAIL_BACKEND = env.str("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_HOST = env.str("EMAIL_HOST", "smtp.zoho.com")
+EMAIL_PORT = env.int("EMAIL_PORT", 465)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", False)
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL", True)
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", "finstransport@movegreen.us")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD", "5cQxudd7jjjd")
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", "finstransport@movegreen.us")
 
 # NPLUSONE
 NPLUSONE_RAISE = False
-NPLUSONE_LOGGER = logging.getLogger('nplusone')
+NPLUSONE_LOGGER = logging.getLogger("nplusone")
 NPLUSONE_LOG_LEVEL = logging.DEBUG
 
 # Firebase
-FIREBASE_CREDENTIAL_PATH = os.path.join(BASE_DIR, 'apps', 'notifications', 'tantana-firebase.json')
+FIREBASE_CREDENTIAL_PATH = os.path.join(
+    BASE_DIR, "apps", "notifications", "tantana-firebase.json"
+)
 cred = credentials.Certificate(FIREBASE_CREDENTIAL_PATH)
-FIREBASE_APP = initialize_app(cred, {
-    'projectId': 'tantana-b2316',
-})
+FIREBASE_APP = initialize_app(
+    cred,
+    {
+        "projectId": "tantana-b2316",
+    },
+)
 FCM_DJANGO_SETTINGS = {
     "DEFAULT_FIREBASE_APP": FIREBASE_APP,
     "APP_VERBOSE_NAME": _("Devices"),
@@ -335,25 +332,37 @@ FCM_DJANGO_FCMDEVICE_MODEL = "notifications.CustomFCMDevice"
 CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 CK_EDITOR_5_UPLOAD_FILE_VIEW_NAME = "ck_editor_5_upload_file"
 CKEDITOR_5_CONFIGS = {
-    'default': {
-        'toolbar': [
-            'heading', '|',
-            'bold', 'italic', 'underline', 'fontColor', 'fontBackgroundColor', '|',
-            'link', 'blockquote', '|',
-            'bulletedList', 'numberedList', '|',
-            'insertTable', '|',
-            'imageUpload', 'mediaEmbed', '|',
-            'undo', 'redo'
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "underline",
+            "fontColor",
+            "fontBackgroundColor",
+            "|",
+            "link",
+            "blockquote",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "insertTable",
+            "|",
+            "imageUpload",
+            "mediaEmbed",
+            "|",
+            "undo",
+            "redo",
         ],
-        'extraPlugins': [
-            'FontColor', 'FontBackgroundColor'
-        ],
+        "extraPlugins": ["FontColor", "FontBackgroundColor"],
         "image": {
             "toolbar": [
                 "imageStyle:full",
                 "imageStyle:side",
                 "|",
-                "imageTextAlternative"
+                "imageTextAlternative",
             ]
         },
     }
@@ -361,30 +370,26 @@ CKEDITOR_5_CONFIGS = {
 
 # SWAGGER
 SWAGGER_SETTINGS = {
-    'DEFAULT_AUTO_SCHEMA_CLASS': 'core.swagger.AppNameTagAutoSchema',
+    "DEFAULT_AUTO_SCHEMA_CLASS": "core.swagger.AppNameTagAutoSchema",
     "USE_SESSION_AUTH": True,
     "SECURITY_DEFINITIONS": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
-        }
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
     "description": "Example: **Bearer &lt;your_token&gt;**",
     "DOC_EXPANSION": "none",
-    'OPERATIONS_SORTER': 'alpha',
-    'TAGS_SORTER': 'alpha',
-    'DEFAULT_MODEL_RENDERING': 'model',
-    'DEFAULT_INFO': 'config.urls.api_info',
-    'DEFAULT_FIELD_INSPECTORS': [
-        'drf_yasg.inspectors.CamelCaseJSONFilter',
-        'drf_yasg.inspectors.ReferencingSerializerInspector',
-        'drf_yasg.inspectors.RelatedFieldInspector',
-        'drf_yasg.inspectors.ChoiceFieldInspector',
-        'drf_yasg.inspectors.FileFieldInspector',
-        'drf_yasg.inspectors.DictFieldInspector',
-        'drf_yasg.inspectors.SimpleFieldInspector',
-        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    "OPERATIONS_SORTER": "alpha",
+    "TAGS_SORTER": "alpha",
+    "DEFAULT_MODEL_RENDERING": "model",
+    "DEFAULT_INFO": "config.urls.api_info",
+    "DEFAULT_FIELD_INSPECTORS": [
+        "drf_yasg.inspectors.CamelCaseJSONFilter",
+        "drf_yasg.inspectors.ReferencingSerializerInspector",
+        "drf_yasg.inspectors.RelatedFieldInspector",
+        "drf_yasg.inspectors.ChoiceFieldInspector",
+        "drf_yasg.inspectors.FileFieldInspector",
+        "drf_yasg.inspectors.DictFieldInspector",
+        "drf_yasg.inspectors.SimpleFieldInspector",
+        "drf_yasg.inspectors.StringDefaultFieldInspector",
     ],
 }
 
@@ -395,7 +400,7 @@ LANGUAGES = (
     ("uz", "Uzbek"),
     ("zh-cn", "Chinese"),
 )
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
+MODELTRANSLATION_DEFAULT_LANGUAGE = "uz"
 
 # todo: use production settings
 CORS_ORIGIN_ALLOW_ALL = True
@@ -408,72 +413,88 @@ DEBUG_TOOLBAR_ENABLED = False
 
 # LEAFLET
 LEAFLET_CONFIG = {
-    'DEFAULT_CENTER': (39.7, 64.6),
-    'DEFAULT_ZOOM': 6,
-    'MIN_ZOOM': 2,
-    'MAX_ZOOM': 18,
-    'SCALE': 'both',
-    'ATTRIBUTION_PREFIX': 'Tantana Team',
+    "DEFAULT_CENTER": (39.7, 64.6),
+    "DEFAULT_ZOOM": 6,
+    "MIN_ZOOM": 2,
+    "MAX_ZOOM": 18,
+    "SCALE": "both",
+    "ATTRIBUTION_PREFIX": "Tantana Team",
 }
 
 
-FRONTEND_URL = env.str('FRONTEND_URL', 'https://demo.aslamjon.uz')
+FRONTEND_URL = env.str("FRONTEND_URL", "https://demo.aslamjon.uz")
 
 # STRIPE SETTINGS
-STRIPE_PUBLIC_KEY = env.str('STRIPE_PUBLIC_KEY', 'pk_test_51RoOTXRsurVYutu30fUhk9KraTrf1wRewivhT6bI3eKp3FtNmXBuAppo9sepZiWRREvjnLD1i7gszXvhBQ68kqJc00bUYBA7vb')
-STRIPE_SECRET_KEY = env.str('STRIPE_SECRET_KEY', 'sk_test_51RoOTXRsurVYutu3FRnUlsD1OoOvRVJdG66RfXuDKlVZhy9pXHj3XQ3MpiOLzHJkZXn7mQXEoWXDFWYVS8mgWd74006MTaUaP5')
-STRIPE_WEBHOOK_SECRET = env.str('STRIPE_WEBHOOK_SECRET', 'whsec_3TKm4Aw8Cdl0S5qqLGqDPLde8M9kJcoX')
+STRIPE_PUBLIC_KEY = env.str(
+    "STRIPE_PUBLIC_KEY",
+    "pk_test_51RoOTXRsurVYutu30fUhk9KraTrf1wRewivhT6bI3eKp3FtNmXBuAppo9sepZiWRREvjnLD1i7gszXvhBQ68kqJc00bUYBA7vb",
+)
+STRIPE_SECRET_KEY = env.str(
+    "STRIPE_SECRET_KEY",
+    "sk_test_51RoOTXRsurVYutu3FRnUlsD1OoOvRVJdG66RfXuDKlVZhy9pXHj3XQ3MpiOLzHJkZXn7mQXEoWXDFWYVS8mgWd74006MTaUaP5",
+)
+STRIPE_WEBHOOK_SECRET = env.str(
+    "STRIPE_WEBHOOK_SECRET", "whsec_3TKm4Aw8Cdl0S5qqLGqDPLde8M9kJcoX"
+)
 
 # SUBSCRIPTION SETTINGS
 SUBSCRIPTION_SETTINGS = {
-    'PRORATION_ENABLED': True,
-    'TRIAL_PERIOD_DAYS': 14,  # Trial period in days
-    'INVOICE_DUE_DAYS': 7,    # Invoice due days
-    'RETRY_FAILED_PAYMENTS': True,
-    'MAX_RETRY_ATTEMPTS': 3,
+    "PRORATION_ENABLED": True,
+    "TRIAL_PERIOD_DAYS": 14,  # Trial period in days
+    "INVOICE_DUE_DAYS": 7,  # Invoice due days
+    "RETRY_FAILED_PAYMENTS": True,
+    "MAX_RETRY_ATTEMPTS": 3,
 }
 
 # Venue synchronization settings
 VENUE_SYNC = {
-    'GOOGLE_PLACES_API_KEY': env.str('GOOGLE_PLACES_API_KEY', default=''),
-    'QUERY': env.str('VENUE_SYNC_QUERY', default='restaurants in Tashkent'),
-    'REGION': env.str('VENUE_SYNC_REGION', default='uz'),
-    'LANGUAGE': env.str('VENUE_SYNC_LANGUAGE', default='en'),
-    'MAX_PHOTOS_PER_PLACE': env.int('VENUE_SYNC_MAX_PHOTOS', default=3),
-    'USE_MULTI_SEARCH': env.bool('VENUE_SYNC_USE_MULTI_SEARCH', default=True),
-    'COMPANY': {
-        'external_id': env.str('VENUE_SYNC_COMPANY_ID', default='google_places_import'),
-        'name': env.str('VENUE_SYNC_COMPANY_NAME', default='Google Places Import')
-    }
+    "GOOGLE_PLACES_API_KEY": env.str("GOOGLE_PLACES_API_KEY", default=""),
+    "QUERY": env.str("VENUE_SYNC_QUERY", default="restaurants in Tashkent"),
+    "REGION": env.str("VENUE_SYNC_REGION", default="uz"),
+    "LANGUAGE": env.str("VENUE_SYNC_LANGUAGE", default="en"),
+    "MAX_PHOTOS_PER_PLACE": env.int("VENUE_SYNC_MAX_PHOTOS", default=3),
+    "USE_MULTI_SEARCH": env.bool("VENUE_SYNC_USE_MULTI_SEARCH", default=True),
+    "COMPANY": {
+        "external_id": env.str("VENUE_SYNC_COMPANY_ID", default="google_places_import"),
+        "name": env.str("VENUE_SYNC_COMPANY_NAME", default="Google Places Import"),
+    },
 }
 
 
 ESKIZ_CREDENTIALS = {
-    'username': env.str('ESKIZ_USERNAME', default='mirzohid.pm@gmail.com'),
-    'secret_key': env.str('ESKIZ_SECRET_KEY', default='9mj0NSIq8FiYqwCN9C3ap0DUWFdS2xV82f51ztZH'),
-    'callback_url': env.str('ESKIZ_CALLBACK_URL', default='https://api.tantana.group/api/v1/eskiz-callback/'),
-    'from_number': env.str('ESKIZ_FROM_NUMBER', default='4546'),
+    "username": env.str("ESKIZ_USERNAME", default="mirzohid.pm@gmail.com"),
+    "secret_key": env.str(
+        "ESKIZ_SECRET_KEY", default="9mj0NSIq8FiYqwCN9C3ap0DUWFdS2xV82f51ztZH"
+    ),
+    "callback_url": env.str(
+        "ESKIZ_CALLBACK_URL", default="https://api.tantana.group/api/v1/eskiz-callback/"
+    ),
+    "from_number": env.str("ESKIZ_FROM_NUMBER", default="4546"),
 }
 
 # TELEGRAM SETTINGS
 TELEGRAM_BOT = {
-    'token': env.str('TELEGRAM_BOT_TOKEN', default='7826447342:AAGX2SSnJwrrVpkTpq_pQcaClVmxq2SLqw0'),
-    'webapp_url': env.str('TELEGRAM_WEBAPP_URL', default='https://t.me/your_bot_username/app'),
+    "token": env.str(
+        "TELEGRAM_BOT_TOKEN", default="7826447342:AAGX2SSnJwrrVpkTpq_pQcaClVmxq2SLqw0"
+    ),
+    "webapp_url": env.str(
+        "TELEGRAM_WEBAPP_URL", default="https://t.me/your_bot_username/app"
+    ),
 }
 
 
 PAYMENT_CREDENTIALS = {
-    'payme': {
-        'merchant_id': env.str('PAYME_MERCHANT_ID', default=''),
-        'callback_url': env.str('PAYME_CALLBACK_URL', default=''),
+    "payme": {
+        "merchant_id": env.str("PAYME_MERCHANT_ID", default=""),
+        "callback_url": env.str("PAYME_CALLBACK_URL", default=""),
     },
-    'paylov': {
-        'merchant_id': env.str('PAYLOV_MERCHANT_ID', default=''),
-        'callback_url': env.str('PAYLOV_CALLBACK_URL', default=''),
+    "paylov": {
+        "merchant_id": env.str("PAYLOV_MERCHANT_ID", default=""),
+        "callback_url": env.str("PAYLOV_CALLBACK_URL", default=""),
     },
-    'click': {
-        'merchant_id': env.str('CLICK_MERCHANT_ID', default=''),
-        'merchant_service_id': env.str('CLICK_MERCHANT_SERVICE_ID', default=''),
-        'callback_url': env.str('CLICK_CALLBACK_URL', default=''),
+    "click": {
+        "merchant_id": env.str("CLICK_MERCHANT_ID", default=""),
+        "merchant_service_id": env.str("CLICK_MERCHANT_SERVICE_ID", default=""),
+        "callback_url": env.str("CLICK_CALLBACK_URL", default=""),
     },
 }

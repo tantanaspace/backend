@@ -9,6 +9,7 @@ class UserInfoAPIView(generics.RetrieveAPIView):
     API endpoint for retrieving authenticated user information.
     Returns user's personal information.
     """
+
     serializer_class = UserInfoSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -16,6 +17,4 @@ class UserInfoAPIView(generics.RetrieveAPIView):
         return self.request.user
 
 
-__all__ = [
-    'UserInfoAPIView'
-] 
+__all__ = ["UserInfoAPIView"]

@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 
-
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -18,4 +17,4 @@ class UserInfoSerializer(serializers.ModelSerializer):
             "date_joined",
             "is_notification_enabled",
         )
-        read_only_fields = fields 
+        read_only_fields = fields

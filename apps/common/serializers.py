@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from django.contrib.gis.geos import Point
+from rest_framework import serializers
 
 
 class PointFieldSerializer(serializers.Field):
@@ -7,6 +7,7 @@ class PointFieldSerializer(serializers.Field):
     Custom serializer field for handling PointField.
     Converts between PointField and [longitude, latitude] list.
     """
+
     def to_representation(self, value):
         """
         Convert PointField to [longitude, latitude] list
@@ -21,17 +22,17 @@ class PointFieldSerializer(serializers.Field):
         """
         if data is None:
             return None
-            
+
         if not isinstance(data, list):
             raise serializers.ValidationError(
                 "Coordinates must be a list of [longitude, latitude]"
             )
-            
+
         if len(data) != 2:
             raise serializers.ValidationError(
                 "Coordinates must contain exactly 2 values: [longitude, latitude]"
             )
-            
+
         try:
             longitude, latitude = data
             return Point(longitude, latitude, srid=4326)

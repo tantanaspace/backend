@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from apps.common.models import UserSearchHistory
 
+
 class UserSearchHistoryDeleteAPIView(DestroyAPIView):
     permission_classes = (IsAuthenticated,)
 
@@ -11,5 +12,5 @@ class UserSearchHistoryDeleteAPIView(DestroyAPIView):
 
 
 __all__ = [
-    'UserSearchHistoryDeleteAPIView',
+    "UserSearchHistoryDeleteAPIView",
 ]

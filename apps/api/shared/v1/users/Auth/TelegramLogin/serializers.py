@@ -1,6 +1,6 @@
-from rest_framework import serializers
-from phonenumber_field.serializerfields import PhoneNumberField
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
 
 class TelegramLoginUserInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,10 +16,9 @@ class TelegramLoginUserInfoSerializer(serializers.ModelSerializer):
             "avatar",
             "date_joined",
             "is_notification_enabled",
-            )
+        )
         read_only_fields = fields
-    
-    
+
 
 class TelegramLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField(read_only=True)

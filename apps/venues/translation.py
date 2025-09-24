@@ -1,30 +1,31 @@
 from modeltranslation.translator import TranslationOptions, register
 
-from apps.venues.models import Company, VenueCategory, Venue, VenueZone
+from apps.venues.models import Company, Venue, VenueCategory, VenueZone
 
 
 @register(Company)
 class CompanyTranslationOption(TranslationOptions):
-    fields = ('name',)
+    fields = ("name",)
+
 
 @register(VenueCategory)
 class VenueCategoryTranslationOption(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 @register(Venue)
 class VenueTranslationOption(TranslationOptions):
-    fields = ('name', 'description', 'location')
+    fields = ("name", "description", "location")
 
 
 @register(VenueZone)
 class VenueZoneTranslationOption(TranslationOptions):
-    fields = ('name',)
-    
+    fields = ("name",)
+
 
 __all__ = [
-    'CompanyTranslationOption',
-    'VenueCategoryTranslationOption',
-    'VenueTranslationOption',
-    'VenueZoneTranslationOption',
+    "CompanyTranslationOption",
+    "VenueCategoryTranslationOption",
+    "VenueTranslationOption",
+    "VenueZoneTranslationOption",
 ]

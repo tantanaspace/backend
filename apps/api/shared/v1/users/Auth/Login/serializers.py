@@ -1,6 +1,7 @@
-from rest_framework import serializers
-from phonenumber_field.serializerfields import PhoneNumberField
 from django.contrib.auth import get_user_model
+from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework import serializers
+
 
 class LoginUserInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,9 +17,8 @@ class LoginUserInfoSerializer(serializers.ModelSerializer):
             "avatar",
             "date_joined",
             "is_notification_enabled",
-            )
-    
-    
+        )
+
 
 class LoginSerializer(serializers.Serializer):
     phone_number = PhoneNumberField(write_only=True, required=True)

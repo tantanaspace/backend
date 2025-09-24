@@ -1,10 +1,10 @@
 from .ChangePhoneNumber import *  # noqa
 from .ConfirmationOTP import *  # noqa
+from .DeleteAccount import *  # noqa
 from .Login import *  # noqa
-from .TelegramLogin import *  # noqa
 from .Registration import *  # noqa
 from .RequestOTP import *  # noqa
 from .ResetPassword import *  # noqa
+from .TelegramLogin import *  # noqa
 from .UserInfo import *  # noqa
 from .UserInfoUpdate import *  # noqa
-from .DeleteAccount import *  # noqa

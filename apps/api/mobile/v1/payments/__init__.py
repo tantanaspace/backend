@@ -1,2 +1,2 @@
-from .PaymentTransactionDetail import *  # noqa
 from .PaymentTransactionCreate import *  # noqa
+from .PaymentTransactionDetail import *  # noqa

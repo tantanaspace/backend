@@ -1,7 +1,7 @@
-from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from apps.notifications.models import UserNotification
 
@@ -19,7 +19,7 @@ class UserNotificationReadAPIView(RetrieveModelMixin, GenericAPIView):
 
         if not instance.is_read:
             instance.is_read = True
-            instance.save(update_fields=['is_read'])
+            instance.save(update_fields=["is_read"])
         return instance
 
     def retrieve(self, request, *args, **kwargs):
@@ -27,12 +27,12 @@ class UserNotificationReadAPIView(RetrieveModelMixin, GenericAPIView):
 
         if not notification.is_read:
             notification.is_read = True
-            notification.save(update_fields=['is_read'])
+            notification.save(update_fields=["is_read"])
 
-        return Response({'is_read': notification.is_read})
+        return Response({"is_read": notification.is_read})
 
     def post(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
 
-__all__ = ['UserNotificationReadAPIView']
+__all__ = ["UserNotificationReadAPIView"]

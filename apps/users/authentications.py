@@ -1,7 +1,8 @@
-import hmac
 import hashlib
-import urllib.parse
+import hmac
 import json
+import urllib.parse
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import BaseAuthentication
@@ -53,7 +54,9 @@ class TelegramWebAppAuthentication(BaseAuthentication):
         if not hash_received:
             return None
 
-        data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(parsed_data.items()))
+        data_check_string = "\n".join(
+            f"{k}={v}" for k, v in sorted(parsed_data.items())
+        )
         secret_key = hmac.new(
             b"WebAppData", settings.TELEGRAM_BOT["token"].encode(), hashlib.sha256
         ).digest()

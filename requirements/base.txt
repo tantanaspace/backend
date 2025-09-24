@@ -28,6 +28,7 @@ pycountry==24.6.1
 sentry-sdk
 python-telegram-bot==13.15
 django-auditlog==3.2.1
+types-requests==2.32.4.20250913
 
 django-versatileimagefield  
 django-leaflet==0.32.0

@@ -9,14 +9,23 @@ def make_pretty_error(data, errors):
         if isinstance(errors[error], dict) and len(errors[error]) >= 1:
             for er in errors[error]:
                 make_pretty_error(data, {er: errors[error][er]})
-        elif isinstance(errors[error], list) and isinstance(errors[error][0], ErrorDetail):
+        elif isinstance(errors[error], list) and isinstance(
+            errors[error][0], ErrorDetail
+        ):
             for i, _ in enumerate(errors[error]):
-                data["errors"].append({"error": f"{error}_{errors[error][0].code}", "message": errors[error][i]})
+                data["errors"].append(
+                    {
+                        "error": f"{error}_{errors[error][0].code}",
+                        "message": errors[error][i],
+                    }
+                )
         elif isinstance(errors[error][0], dict) and len(errors[error]) >= 1:
             for er in errors[error]:
                 make_pretty_error(data, er)
         else:
-            data["errors"].append({"error": f"{error}_{errors[error].code}", "message": errors[error]})
+            data["errors"].append(
+                {"error": f"{error}_{errors[error].code}", "message": errors[error]}
+            )
 
 
 def _handle_validation_error(exc, context):
