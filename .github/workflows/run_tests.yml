@@ -6,6 +6,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+
     env:
       SECRET_KEY: SOME_SECRET_KEY
       DEBUG: FALSE
