@@ -31,3 +31,5 @@ class LoginAPIView(GenericAPIView):
 
 
 __all__ = ["LoginAPIView"]
+
+print("User can now choose language")
