@@ -20,9 +20,22 @@ class LoginTestCase(APITestCase):
             "full_name": "Adam Sandler",
         }
 
+    def tearDown(self):
+        User.objects.all().delete()
+
     def given_existing_user(self) -> User:
         user = User.objects.create_user(**self.existing_user_data)
         return user
+
+    def test_user_doesnt_exist_fails_login(self):
+        data = {
+            "phone_number": "+998901234567",
+            "password": "Non existing password",
+        }
+
+        response = self.client.post(LOGIN_URLS['login'], data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_successful_login(self):
         self.given_existing_user()
